@@ -22,7 +22,12 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <main>{children}</main>
+          <div className="w-full sticky top-0 left-0 backdrop-filter backdrop-blur-lg bg-opacity-30 border-b z-10">
+            {/* <Navbar /> */}
+            Navbar
+          </div>
+          <main className="max-w-3xl mx-auto px-4 min-h-full">{children}</main>
+          <div className="w-full border-t mt-16">{/* <Footer /> */} Footer</div>
         </ThemeProvider>
       </body>
     </html>
