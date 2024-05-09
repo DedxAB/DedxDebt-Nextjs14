@@ -1,6 +1,10 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ClerkProvider } from "@clerk/nextjs";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import BottomNavbar from "@/components/BottomNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,22 +18,30 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="w-full sticky top-0 left-0 backdrop-filter backdrop-blur-lg bg-opacity-30 border-b z-10">
-            {/* <Navbar /> */}
-            Navbar
-          </div>
-          <main className="max-w-3xl mx-auto px-4 min-h-full">{children}</main>
-          <div className="w-full border-t mt-16">{/* <Footer /> */} Footer</div>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body className={inter.className}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="w-full sticky top-0 left-0 backdrop-filter backdrop-blur-lg bg-opacity-30 border-b z-20">
+              <Navbar />
+            </div>
+            <main className="max-w-3xl mx-auto px-4 min-h-[100vh]">
+              {children}
+            </main>
+            <div className="fixed bottom-0 w-full z-10 backdrop-filter backdrop-blur-lg bg-opacity-30 border-t sm:hidden">
+              <BottomNavbar />
+            </div>
+            <div className="w-full border-t mt-16 hidden sm:block">
+              <Footer />
+            </div>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

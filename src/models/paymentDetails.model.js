@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const paymentDetailsSchema = new mongoose.Schema(
   {
-    userId: {
+    lender: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: [true, "Please provide a user ID"],

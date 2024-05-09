@@ -1,12 +1,14 @@
-import { ToggleTheme } from "@/components/ToggleTheme";
-import { Button } from "@/components/ui/button";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const user = await currentUser();
+  if (user) {
+    redirect("/dashboard");
+  }
   return (
     <div className="flex items-center gap-5">
       <h1>Hello, world!</h1>
-      <ToggleTheme />
-      <Button variant={`outline`}>Helleo</Button>
     </div>
   );
 }
