@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ToggleTheme } from "./ToggleTheme";
 import { Button } from "./ui/button";
-import { SignOutButton, SignedOut } from "@clerk/nextjs";
+import { SignedOut } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import ProfileButton from "./ProfileButton";
 
@@ -21,10 +21,15 @@ export default async function Navbar() {
           </SignedOut>
           <div className="items-center hidden sm:flex">
             {user && (
-              <ProfileButton
-                userImage={user?.imageUrl}
-                currentUserName={user?.fullName}
-              />
+              <div className="flex items-center justify-between gap-4">
+                <Link href={`/create-ticket`}>
+                  <Button>Create Ticket</Button>
+                </Link>
+                <ProfileButton
+                  userImage={user?.imageUrl}
+                  currentUserName={user?.fullName}
+                />
+              </div>
             )}
           </div>
         </div>

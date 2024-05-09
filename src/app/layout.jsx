@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BottomNavbar from "@/components/BottomNavbar";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
             <main className="max-w-3xl mx-auto px-4 min-h-[100vh]">
               {children}
             </main>
+            <Toaster richColors position="top-right" closeButton />
             <div className="fixed bottom-0 w-full z-10 backdrop-filter backdrop-blur-lg bg-opacity-30 border-t sm:hidden">
               <BottomNavbar />
             </div>
