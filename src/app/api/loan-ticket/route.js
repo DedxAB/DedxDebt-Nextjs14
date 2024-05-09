@@ -33,7 +33,10 @@ export async function POST(req) {
       paymentsBack: [{ paymentDate, paymentAmount }],
     });
 
-    return NextResponse.json({ data: newLoanTicket }, { status: 201 });
+    return NextResponse.json(
+      { message: "Ticket created Successfully", data: newLoanTicket },
+      { status: 201 }
+    );
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

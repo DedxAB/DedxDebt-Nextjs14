@@ -1,21 +1,17 @@
 import dbConnect from "@/db/mongodb";
-import LoanTicket from "@/models/loanTicket.model";
 import User from "@/models/user.model";
 import { NextResponse } from "next/server";
 
 export async function GET(_req, { params }) {
-  const { ticketId } = params;
+  const { clerkId } = params;
   try {
     await dbConnect();
-    const loanTicket = await LoanTicket.findById(ticketId).populate("lender");
-    if (!loanTicket) {
-      return NextResponse.json(
-        { error: "Loan ticket not found" },
-        { status: 404 }
-      );
+    const user = await User.findOne({ clerkId });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
     return NextResponse.json(
-      { message: "Here is you loan-ticket", data: loanTicket },
+      { message: "User found", data: user },
       { status: 200 }
     );
   } catch (error) {

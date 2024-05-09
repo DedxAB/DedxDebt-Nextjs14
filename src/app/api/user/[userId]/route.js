@@ -10,7 +10,10 @@ export async function GET(_req, { params }) {
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
-    return NextResponse.json({ data: user }, { status: 200 });
+    return NextResponse.json(
+      { message: "Here is the lender data:", data: user },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

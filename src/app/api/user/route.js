@@ -3,14 +3,16 @@ import User from "@/models/user.model";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  const { name, email, username, googleImage, address } = await req.json();
+  const {clerkId, name, email,phoneNumber, username, image, address } = await req.json();
   try {
     await dbConnect();
     const newUser = await User.create({
+      clerkId,
       name,
       email,
+      phoneNumber,
       username,
-      googleImage,
+      image,
       address,
     });
     return NextResponse.json({ data: newUser }, { status: 201 });
