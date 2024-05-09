@@ -25,9 +25,18 @@ const userSchema = new mongoose.Schema(
         "Please provide a valid email",
       ],
     },
+    phoneNumber: {
+      type: String,
+      required: false,
+      trim: [true, "Phone number must not have spaces"],
+      match: [
+        /^(\+\d{1,3}[- ]?)?[6789]\d{9}$/,
+        "Please provide a valid phone number",
+      ],
+    },
     username: {
       type: String,
-      required: [true, "Please provide a username"],
+      required: false,
       unique: [true, "Username already exists"],
       trim: [true, "Username must not have spaces"],
       lowercase: [true, "Username must be in lowercase"],
@@ -38,7 +47,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: false,
       trim: [true, "Image must not have spaces"],
-      lowercase: [true, "Google image must be in lowercase"],
+      lowercase: [true, "Image url must be in lowercase"],
     },
     address: {
       type: String,

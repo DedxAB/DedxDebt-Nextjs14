@@ -35,7 +35,7 @@ const loanTicketSchema = new mongoose.Schema(
       borrowerPhoneNumber: {
         type: String,
         required: false,
-        trim: true,
+        trim: [true, "Phone number must not have spaces"],
         match: [
           /^(\+\d{1,3}[- ]?)?[6789]\d{9}$/,
           "Please provide a valid phone number",
@@ -50,7 +50,6 @@ const loanTicketSchema = new mongoose.Schema(
     loanReason: {
       type: String,
       required: false,
-      trim: true,
       minlength: [3, "Reason must be at least 3 characters long"],
       maxlength: [100, "Reason must not exceed 100 characters"],
     },

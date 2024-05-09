@@ -53,9 +53,13 @@ function atLeastOnePaymentMethod(value) {
 }
 
 // Apply the custom validator to the paymentMethod field
-paymentDetailsSchema
-  .path("paymentMethod")
-  .validate(atLeastOnePaymentMethod, "At least one payment method is required");
+paymentDetailsSchema.pre("validate", function (next) {
+  if (!atLeastOnePaymentMethod(this.paymentMethod)) {
+    next(new Error("Please provide at least one payment method"));
+  } else {
+    next();
+  } 
+});
 
 const PaymentDetails =
   mongoose.models.PaymentDetails ||
