@@ -1,4 +1,4 @@
-import OnboardingForm from "@/components/OnboardingForm";
+import AccountProfileForm from "@/components/AccountProfileForm";
 import { fetchUserByClerkId } from "@/services/userServices";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -6,14 +6,11 @@ import { redirect } from "next/navigation";
 export default async function page() {
   const user = await currentUser();
 
-  let currentUserData = null;
   const data = await fetchUserByClerkId(user?.id);
-  if (data?.data) {
-    currentUserData = data.data;
-  }
+  const currentUserData = data?.data ? data?.data : null;
 
   // if the user is already onboarded then redirect to dashboard
-  if (currentUserData?.onborded) {
+  if (currentUserData?.onboarded) {
     redirect("/dashboard");
   }
   // this data comes from mongoDB
@@ -28,7 +25,7 @@ export default async function page() {
 
   // here we are creating a new object with the data from mongoDB and Clerk
   const userData = {
-    clerkId: user.id,
+    clerkId: user?.id,
     name: userInfo?.name || user?.fullName,
     email: userInfo?.email || user?.emailAddresses[0].emailAddress,
     phoneNumber: userInfo?.phoneNumber || "",
@@ -44,7 +41,7 @@ export default async function page() {
         <p>Complete your profile to continue..</p>
       </div>
 
-      <OnboardingForm userData={userData} />
+      <AccountProfileForm userData={userData} btnText={"Save"} />
     </>
   );
 }

@@ -1,4 +1,3 @@
-import dbConnect from "@/db/mongodb";
 import { baseUrl } from "@/utils/constants";
 
 export const fetchAllUser = async () => {

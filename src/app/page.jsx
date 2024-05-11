@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 export default async function Home() {
   const user = await currentUser();
   if (user) {
-    redirect("/dashboard");
+    redirect("/onboarding");
   }
   return (
     <div className="flex items-center gap-5">

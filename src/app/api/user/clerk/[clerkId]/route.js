@@ -4,17 +4,17 @@ import { NextResponse } from "next/server";
 
 export async function GET(_req, { params }) {
   const { clerkId } = params;
+  await dbConnect();
   try {
-    await dbConnect();
-    const user = await User.findOne({ clerkId });
+    const user = await User.findOne({ clerkId: clerkId });
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
     return NextResponse.json(
-      { message: "User found", data: user },
+      { message: "user found", data: user },
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message });
   }
 }

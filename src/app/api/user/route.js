@@ -3,30 +3,28 @@ import User from "@/models/user.model";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  const {clerkId, name, email,phoneNumber, username, image, address } = await req.json();
+  const { clerkId, name, email, phoneNumber, username, image, address } =
+    await req.json();
+  await dbConnect();
   try {
-    await dbConnect();
-    const newUser = await User.create({
-      clerkId,
-      name,
-      email,
-      phoneNumber,
-      username,
-      image,
-      address,
-    });
-    return NextResponse.json({ data: newUser }, { status: 201 });
-  } catch (error) {
-    console.log(`Error name: ${error.name} and message: ${error.message}`);
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
-
-export async function GET() {
-  try {
-    await dbConnect();
-    const users = await User.find().sort({ createdAt: -1 });
-    return NextResponse.json({ data: users }, { status: 200 });
+    await User.findOneAndUpdate(
+      { clerkId: clerkId },
+      {
+        clerkId,
+        name,
+        image,
+        email,
+        phoneNumber,
+        username,
+        address,
+        onboarded: true,
+      },
+      { new: true, upsert: true, runValidators: true }
+    );
+    return NextResponse.json(
+      { message: "Data saved successfully" },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

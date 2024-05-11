@@ -18,7 +18,6 @@ const loanTicketSchema = new mongoose.Schema(
       type: String,
       required: false,
       trim: true,
-      minlength: [3, "Address must be at least 3 characters long"],
       maxlength: [100, "Address must not exceed 100 characters"],
     },
     borrowerContactDetails: {
@@ -50,7 +49,7 @@ const loanTicketSchema = new mongoose.Schema(
     loanReason: {
       type: String,
       required: false,
-      minlength: [3, "Reason must be at least 3 characters long"],
+      trim: true,
       maxlength: [100, "Reason must not exceed 100 characters"],
     },
     loanDate: {
@@ -71,12 +70,12 @@ const loanTicketSchema = new mongoose.Schema(
     },
     paymentsBack: [
       {
-        paymentDate: {
+        paybackDate: {
           type: Date,
           required: [true, "Please provide the payment date"],
           default: Date.now,
         },
-        paymentAmount: {
+        paybackAmount: {
           type: Number,
           required: [true, "Please provide the payment amount"],
           min: [0, "payment amount must not be less than 0"],

@@ -11,11 +11,8 @@ export async function POST(req) {
     borrowerPhoneNumber,
     loanAmount,
     loanReason,
-    loanDate,
-    reminderSent,
     paybackStatus,
-    paymentDate,
-    paymentAmount,
+    paybackAmount,
   } = await req.json();
   try {
     await dbConnect();
@@ -27,10 +24,9 @@ export async function POST(req) {
       borrowerContactDetails: { borrowerEmail, borrowerPhoneNumber },
       loanAmount,
       loanReason,
-      loanDate,
-      reminderSent,
+      reminderSent: false,
       paybackStatus,
-      paymentsBack: [{ paymentDate, paymentAmount }],
+      paymentsBack: [{ paybackAmount }],
     });
 
     return NextResponse.json(
