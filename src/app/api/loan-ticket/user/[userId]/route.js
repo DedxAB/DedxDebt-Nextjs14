@@ -3,12 +3,13 @@ import LoanTicket from "@/models/loanTicket.model";
 import User from "@/models/user.model";
 import { NextResponse } from "next/server";
 
-
 export async function GET(_req, { params }) {
   const { userId } = params;
   await dbConnect();
   try {
-    const notes = await LoanTicket.find({ lender: userId}).populate("lender");
+    const notes = await LoanTicket.find({ lender: userId })
+      .populate("lender")
+      .sort({ createdAt: -1 });
     if (!notes) {
       return NextResponse.json(
         { message: "No loan ticket found" },
