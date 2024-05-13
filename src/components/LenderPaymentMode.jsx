@@ -5,23 +5,33 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-export default function LenderPaymentMode({ userInfo }) {
+export default function LenderPaymentMode({ userInfo, paymentMode }) {
   const { _id, name } = userInfo;
-  const [upiId, setUpiId] = useState("");
-  const [upiNumber, setUpiNumber] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [ifsc, setIfsc] = useState("");
+  // console.log(paymentMode);
+  const [upiId, setUpiId] = useState(paymentMode?.paymentMethod?.upiId || "");
+  const [upiNumber, setUpiNumber] = useState(
+    paymentMode?.paymentMethod?.upiNumber || ""
+  );
+  const [accountNumber, setAccountNumber] = useState(
+    paymentMode?.paymentMethod?.bankAccount?.accountNumber || ""
+  );
+  const [confirmAccountNumber, setConfirmAccountNumber] = useState("");
+  const [ifsc, setIfsc] = useState(
+    paymentMode?.paymentMethod?.bankAccount?.ifsc || ""
+  );
+
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
-    // if (!upiId || !upiNumber || !accountNumber || !ifsc) {
-    //   return toast.error("All fields are required");
-    // }
+    if (accountNumber !== confirmAccountNumber) {
+      return toast.error("Account number does not match");
+    }
 
-    const toastId = toast.loading("Sending your details...");
+    const toastId = toast.loading("Updating your details...");
     try {
       const res = await fetch("/api/payment-mode", {
         method: "POST",
@@ -41,10 +51,8 @@ export default function LenderPaymentMode({ userInfo }) {
         throw new Error(error.error);
       }
       toast.success("Payment details added successfully", { id: toastId });
-      // setUpiId("");
-      // setUpiNumber("");
-      // setAccountNumber("");
-      // setIfsc("");
+      router.back();
+      router.refresh();
     } catch (error) {
       toast.error(error.message, { id: toastId });
     }
@@ -86,11 +94,21 @@ export default function LenderPaymentMode({ userInfo }) {
         <div>
           <Label htmlFor="accountNumber">Account Number</Label>
           <Input
-            type="text"
+            type="password"
             id="accountNumber"
             name="accountNumber"
             onChange={(e) => setAccountNumber(e.target.value)}
             value={accountNumber}
+          />
+        </div>
+        <div>
+          <Label htmlFor="confirmAccount">Confirm account number</Label>
+          <Input
+            type="text"
+            id="confirmAccount"
+            name="confirmAccount"
+            onChange={(e) => setConfirmAccountNumber(e.target.value)}
+            value={confirmAccountNumber}
           />
         </div>
         <div>
@@ -103,6 +121,13 @@ export default function LenderPaymentMode({ userInfo }) {
             value={ifsc}
           />
         </div>
+      </div>
+      <div className="my-5">
+        <p>
+          <span className="font-semibold">Note:</span> Please make sure you
+          provide the correct details as it will be used for receiving payments.
+          Your payment details will be sent to the borrower mailing address.
+        </p>
       </div>
       <div>
         <Button onClick={handleSubmit}>Update</Button>
