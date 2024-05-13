@@ -43,23 +43,24 @@ export default async function Dashboard() {
       <div>
         {noteData?.data?.map((note) => (
           <div key={note._id} className="border p-5 my-3 rounded-md">
-            <h2>{note.lender.name}</h2>
-            <p>{note.lender.email}</p>
+            <h2>Lender Name: {note.lender.name}</h2>
+            <p>Lender email: {note.lender.email}</p>
             <h2>Borrower: {note.borrowerName}</h2>
-            <p>{note.borrowerAddress}</p>
-            <p>{note.borrowerContactDetails.borrowerEmail}</p>
-            <p>{note.borrowerContactDetails.borrowerPhoneNumber}</p>
-            <p>💰&nbsp;{note.loanAmount}</p>
-            <h3>{note.loanReason}</h3>
-            <p>{dayjs(note.loanDate).format("MMM D, YYYY hh:mm A")}</p>
+            <p>Address: {note.borrowerAddress}</p>
+            <p>Email: {note.borrowerContactDetails.borrowerEmail}</p>
+            <p>Phone No.: {note.borrowerContactDetails.borrowerPhoneNumber}</p>
+            <p>Loan Amount: Rs.&nbsp;{note.loanAmount}</p>
+            <h3>Reason: {note.loanReason}</h3>
+            <p>Loan Date: {dayjs(note.loanDate).format("MMM D, YYYY")}</p>
             <p>Payback Status: {note.paybackStatus}</p>
             <div>
               {note.paymentsBack.map((payment) => (
                 <div key={payment._id}>
                   <p>
-                    {dayjs(payment.paybackDate).format("MMM D, YYYY hh:mm A")}
+                    Payback Date:&nbsp;
+                    {dayjs(payment.paybackDate).format("MMM D, YYYY")}
                   </p>
-                  <p>{payment.paybackAmount}</p>
+                  <p>Payback Amount: Rs. {payment.paybackAmount}</p>
                 </div>
               ))}
             </div>
