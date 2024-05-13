@@ -48,6 +48,15 @@ export default async function page() {
           <Button variant="outline">Edit Profile</Button>
         </Link>
       </div>
+      <div>
+        <h2>Your Payment Mode</h2>
+        <p>UPI ID : {}</p>
+      </div>
+      <div>
+        <Link href={"/payment-mode"}>
+          <Button variant="outline">Update Payment Mode</Button>
+        </Link>
+      </div>
     </div>
   );
 }
