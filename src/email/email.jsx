@@ -3,21 +3,13 @@ import {
   Container,
   Head,
   Html,
-  Img,
-  Link,
   Preview,
   Section,
   Text,
 } from "@react-email/components";
 import * as React from "react";
 
-const Email = ({
-  borrowerName,
-  borrowedAmount,
-  loanDate,
-  lenderName,
-  lenderPaymentDetails,
-}) => (
+const Email = ({ borrowerName, loanAmount, loanDate, lenderName }) => (
   <Html>
     <Head />
     <Preview>Your Debt story is waiting for you 🙂</Preview>
@@ -29,8 +21,9 @@ const Email = ({
         </Section>
         <Section style={paragraphList}>
           <Text style={paragraph}>
-            We&apos;re writing to let you know about your debt story. You borrowed $
-            {borrowedAmount} on {new Date(loanDate).toLocaleDateString()}.
+            We&apos;re writing to let you know about your debt story. You
+            borrowed Rs. {loanAmount} on{" "}
+            {new Date(loanDate).toLocaleDateString()}.
           </Text>
         </Section>
         <Section style={paragraphContent}>
@@ -39,29 +32,17 @@ const Email = ({
             details:
           </Text>
           <ul>
-            {lenderPaymentDetails.map((payment, index) => (
-              <li key={index} className="mb-4">
-                <Text style={subHeading}>
-                  Payment Method: {payment.paymentMethod}
-                </Text>
-                {payment.paymentMethod === "UPI" && (
-                  <div>
-                    <Text style={paragraph}>UPI ID: {payment.upiId}</Text>
-                    <Text style={paragraph}>
-                      UPI Number: {payment.upiNumber}
-                    </Text>
-                  </div>
-                )}
-                {payment.paymentMethod === "Bank Transfer" && (
-                  <div>
-                    <Text style={paragraph}>
-                      Bank Account Number: {payment.accountNumber}
-                    </Text>
-                    <Text style={paragraph}>IFSC Code: {payment.ifscCode}</Text>
-                  </div>
-                )}
-              </li>
-            ))}
+            <li style={paragraph}>UPI ID: arnab.5547@sbi</li>
+            <li style={paragraph}>UPI Number: 8597605547</li>
+          </ul>
+        </Section>
+        <Section style={paragraphContent}>
+          <Text style={paragraph}>
+            If you have any questions or concerns, please contact your lender.
+          </Text>
+          <ul>
+            <li style={paragraph}> Email: arnab.officialcorp@gmail.com </li>
+            <li style={paragraph}> Phone: 8597605547 </li>
           </ul>
         </Section>
         <Section style={paragraphContent}>
@@ -72,8 +53,8 @@ const Email = ({
         </Section>
         <Section style={paragraphContent}>
           <Text style={paragraph}>Thank you,</Text>
-          <Text style={{ ...paragraph, fontSize: "20px" }}>
-            The DedxDebt team
+          <Text style={{ ...paragraph, fontSize: "16px" }}>
+            The DedxDebt Team
           </Text>
         </Section>
       </Container>

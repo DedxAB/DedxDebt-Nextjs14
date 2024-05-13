@@ -10,10 +10,10 @@ export default function SendEmail() {
     const formData = new FormData(event.target);
     const email = formData.get("email");
     // console.log(email);
-    // const borrowerName = "xed aab";
-    //   const text = "Email from DedxDebt";
-    //   const 
-    await sendEmail(email, text, borrowerName);
+    const borrowerName = "xed aab";
+    const text = "Email from DedxDebt";
+    //   const
+    await sendEmail(email, borrowerName, text);
     toast.success("Email sent successfully");
   };
   return (

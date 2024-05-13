@@ -11,10 +11,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: {
-    default: "DedxDebt - Debt Tracker",
+    default: "DedxDebt - Debt Manager",
     template: "%s - DedxDebt",
   },
-  description: "DedxDebt is a simple debt tracker.",
+  description: "DedxDebt is a simple debt manager.",
 };
 
 export default function RootLayout({ children }) {

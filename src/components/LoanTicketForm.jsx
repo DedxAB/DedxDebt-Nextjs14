@@ -21,11 +21,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { sendEmail } from "@/actions/email.action";
 
 export default function LoanTicketForm({ lenderId, currentUserData }) {
   const [paybackStatus, setPaybackStatus] = useState("pending");
   const [borrowerName, setBorrowerName] = useState("");
   const [borrowerEmail, setBorrowerEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
   const [borrowerPhoneNumber, setBorrowerPhoneNumber] = useState("");
   const [borrowerAddress, setBorrowerAddress] = useState("");
   const [loanAmount, setLoanAmount] = useState(0);
@@ -38,8 +40,15 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
 
   const PostLoanTicket = async (e) => {
     e.preventDefault();
-    // console.log(loanDate, paybackDate);
+
+    // check if borrower email and confirm email are the same
+    if (borrowerEmail !== confirmEmail) {
+      toast.error("Emails do not match");
+      return;
+    }
+
     const toastId = toast.loading("Creating Loan Ticket..");
+
     try {
       const res = await fetch("/api/loan-ticket", {
         method: "POST",
@@ -68,6 +77,24 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
       toast.success("Loan Ticket created successfully", {
         id: toastId,
       });
+
+      const toastId2 = toast.loading("Sending email to borrower..");
+      // send email to borrower
+      const text = "New Notice of Your Debt";
+      const lender = currentUserData?.name;
+      await sendEmail(
+        borrowerName,
+        borrowerEmail,
+        text,
+        loanAmount,
+        loanDate,
+        lender
+      );
+
+      toast.success("Email sent to borrower", {
+        id: toastId2,
+      });
+
       router.push("/dashboard");
       router.refresh();
     } catch (error) {
@@ -97,7 +124,6 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             type="text"
             placeholder="Enter borrower name"
             id="borrowerName"
-            autoComplete="off"
             name="borrowerName"
           />
         </div>
@@ -109,8 +135,19 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             type="email"
             placeholder="Enter borrower email"
             id="email"
-            autoComplete="off"
             name="borrowerEmail"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="confirmEmail">Confirm Email 🌟</Label>
+          <Input
+            onChange={(e) => setConfirmEmail(e.target.value)}
+            value={confirmEmail}
+            type="email"
+            placeholder="Enter borrower email"
+            id="confirmEmail"
+            autoComplete="off"
+            name="confirmEmail"
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -121,7 +158,6 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             type="text"
             placeholder="Enter borrower phone number (optional)"
             id="phoneNumber"
-            autoComplete="off"
             name="borrowerPhoneNumber"
           />
         </div>
@@ -132,7 +168,6 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             value={borrowerAddress}
             placeholder="Enter borrower address (optional)"
             id="address"
-            autoComplete="off"
             name="borrowerAddress"
           />
         </div>
@@ -201,10 +236,10 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
           <Label>Payback Status 🌟</Label>
           <Select
             onValueChange={(newValue) => setPaybackStatus(newValue)}
-            defaultValue={paybackStatus}
+            // defaultValue={paybackStatus}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Share with" />
+              <SelectValue placeholder="Amount Back Status" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -254,21 +289,24 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
       </div>
       <div className="flex flex-col gap-2 my-2">
         <p className="text-gray-500 text-sm">
-          You can add more payback details later.
+          You can add more payback details later (payback amount, payback date &
+          payback status).
         </p>
       </div>
 
-      <div className="">
+      <div>
         <p>
           Before you create a loan ticket, make sure you have the
           borrower&apos;s consent to share their contact details with us.
         </p>
+        <p>
+          <span className="font-semibold">Note : </span>
+          Please verify the borrower&apos;s email address cause we will send an
+          email to the borrower with the loan details.
+        </p>
       </div>
       <div className="mt-5 mb-28">
-        <Button
-          onClick={PostLoanTicket}
-          className="bg-primary text-white font-bold"
-        >
+        <Button onClick={PostLoanTicket} className="bg-primary font-bold">
           Submit
         </Button>
       </div>

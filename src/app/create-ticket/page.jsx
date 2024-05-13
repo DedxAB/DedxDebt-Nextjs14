@@ -13,6 +13,7 @@ export default async function page() {
   if (!currentUserData?.onboarded) {
     redirect("/onboarding"); // redirect to onboarding page
   }
+  
 
   return (
     <div>

@@ -117,7 +117,7 @@ export default function AccountProfileForm({ userData, btnText }) {
           />
         </div>
       </div>
-      <div>
+      <div className="my-5">
         <Button onClick={postUserFormData}>{btnText}</Button>
       </div>
     </>
