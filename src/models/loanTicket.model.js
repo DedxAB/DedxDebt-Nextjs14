@@ -23,7 +23,7 @@ const loanTicketSchema = new mongoose.Schema(
     borrowerContactDetails: {
       borrowerEmail: {
         type: String,
-        required: false,
+        required: [true, "Please provide the borrower's email"],
         trim: true,
         lowercase: true,
         match: [
@@ -85,20 +85,6 @@ const loanTicketSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-function atleastOneContactDetailsOfBorrower(value) {
-  return value.borrowerEmail || value.borrowerPhoneNumber;
-}
-
-loanTicketSchema.pre("validate", function (next) {
-  if (!atleastOneContactDetailsOfBorrower(this.borrowerContactDetails)) {
-    next(
-      new Error("Please provide at least one contact detail of the borrower")
-    );
-  } else {
-    next();
-  }
-});
 
 const LoanTicket =
   mongoose.models.LoanTicket || mongoose.model("LoanTicket", loanTicketSchema);
