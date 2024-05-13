@@ -1,8 +1,11 @@
 import dbConnect from "@/db/mongodb";
 import LoanTicket from "@/models/loanTicket.model";
+import { validateLoanTicket } from "@/validations/ticket.validation";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
+  await dbConnect();
+
   const {
     lender,
     borrowerName,
@@ -10,23 +13,41 @@ export async function POST(req) {
     borrowerEmail,
     borrowerPhoneNumber,
     loanAmount,
+    loanDate,
     loanReason,
     paybackStatus,
     paybackAmount,
+    paybackDate,
   } = await req.json();
-  try {
-    await dbConnect();
 
+  // Validate the input data
+  const error = validateLoanTicket(
+    borrowerName,
+    borrowerEmail,
+    loanAmount,
+    lender
+  );
+  if (error) {
+    return NextResponse.json({ error }, { status: 400 });
+  }
+
+  try {
     const newLoanTicket = await LoanTicket.create({
       lender,
       borrowerName,
       borrowerAddress,
-      borrowerContactDetails: { borrowerEmail, borrowerPhoneNumber },
+      borrowerContactDetails: {
+        borrowerEmail,
+        borrowerPhoneNumber,
+      },
       loanAmount,
+      loanDate: loanDate || Date.now(), // Use provided loanDate or default to current date
       loanReason,
-      reminderSent: false,
+      reminderSent: false, // Set to false by default, can be updated later
       paybackStatus,
-      paymentsBack: [{ paybackAmount }],
+      paymentsBack: paybackAmount
+        ? [{ paybackAmount, paybackDate: paybackDate || Date.now() }]
+        : [],
     });
 
     return NextResponse.json(
