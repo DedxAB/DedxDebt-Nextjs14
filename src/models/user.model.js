@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema(
       unique: [true, "Username already exists"],
       trim: [true, "Username must not have spaces"],
       lowercase: [true, "Username must be in lowercase"],
+      minlength: [3, "Username must be at least 3 characters long"],
       maxlength: [30, "Username must not exceed 30 characters"],
     },
     image: {

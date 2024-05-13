@@ -19,7 +19,7 @@ export default function AccountProfileForm({ userData, btnText }) {
   const postUserFormData = async (e) => {
     e.preventDefault();
 
-    const toastId = toast.loading("Saving your data..");
+    const toastId = toast.loading("Saving your data...");
 
     try {
       const res = await fetch("/api/user", {
@@ -39,8 +39,8 @@ export default function AccountProfileForm({ userData, btnText }) {
       });
 
       if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error);
+        const { error } = await res.json();
+        throw new Error(error);
       }
       toast.success("Data saved successfully", {
         id: toastId,
@@ -54,7 +54,7 @@ export default function AccountProfileForm({ userData, btnText }) {
       }
       router.refresh();
     } catch (error) {
-      toast.error(error, {
+      toast.error(error.message, {
         id: toastId,
       });
     }
