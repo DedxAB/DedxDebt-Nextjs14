@@ -20,6 +20,14 @@ const paymentModeSchema = new mongoose.Schema(
         trim: true,
       },
       bankAccount: {
+        accountHolderName: {
+          type: String,
+          required: false,
+        },
+        bankName: {
+          type: String,
+          required: false,
+        },
         accountNumber: {
           type: String,
           required: false,

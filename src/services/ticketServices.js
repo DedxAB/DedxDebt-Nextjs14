@@ -6,11 +6,11 @@ export const fetchAllTicketsByUserId = async (userId) => {
       cache: "no-store",
     });
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message);
+      const { error } = await response.json();
+      throw new Error(error);
     }
     return response.json();
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message + " from fetchAllTicketsByUserId\n");
   }
 };
