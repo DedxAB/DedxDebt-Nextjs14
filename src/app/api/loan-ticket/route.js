@@ -1,5 +1,6 @@
 import dbConnect from "@/db/mongodb";
 import LoanTicket from "@/models/loanTicket.model";
+import User from "@/models/user.model";
 import { validateLoanTicket } from "@/validations/ticket.validation";
 import { NextResponse } from "next/server";
 
@@ -49,6 +50,15 @@ export async function POST(req) {
         ? [{ paybackAmount, paybackDate: paybackDate || Date.now() }]
         : [],
     });
+
+    // Update the lender's loanTickets array with the new ticket ID and also here we can use addToSet method to avoid duplicates
+    await User.findByIdAndUpdate(
+      { _id: lender },
+      {
+        $push: { loanTickets: newLoanTicket._id },
+      },
+      { new: true }
+    );
 
     return NextResponse.json(
       { message: "Ticket created Successfully", data: newLoanTicket },

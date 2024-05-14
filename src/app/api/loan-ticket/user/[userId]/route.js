@@ -10,9 +10,9 @@ export async function GET(_req, { params }) {
     const notes = await LoanTicket.find({ lender: userId })
       .populate("lender")
       .sort({ createdAt: -1 });
-    if (!notes) {
+    if (!notes || notes.length === 0) {
       return NextResponse.json(
-        { message: "No loan ticket found" },
+        { error: "No loan ticket found" },
         { status: 404 }
       );
     }
@@ -21,6 +21,6 @@ export async function GET(_req, { params }) {
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

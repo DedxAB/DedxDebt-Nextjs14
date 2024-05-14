@@ -9,7 +9,7 @@ export const GET = async (_req, { params }) => {
     const paymentMode = await PaymentMode.findOne({ lender: lenderId });
     if (!paymentMode) {
       return NextResponse.json(
-        { message: "Payment mode not found" },
+        { error: "Payment mode not found" },
         { status: 404 }
       );
     }
