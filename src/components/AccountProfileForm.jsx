@@ -71,7 +71,6 @@ export default function AccountProfileForm({ userData, btnText }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             id="name"
-            autoComplete="off"
           />
         </div>
         <div>
@@ -92,7 +91,6 @@ export default function AccountProfileForm({ userData, btnText }) {
             id="phoneNumber"
             placeholder="+91 xxxxxxxxxx (Optional)"
             onChange={(e) => setPhoneNumber(e.target.value)}
-            autoComplete="off"
           />
         </div>
         <div>
@@ -103,7 +101,6 @@ export default function AccountProfileForm({ userData, btnText }) {
             id="username"
             placeholder="username... (Optional)"
             onChange={(e) => setUsername(e.target.value)}
-            autoComplete="off"
           />
         </div>
         <div>
@@ -113,7 +110,6 @@ export default function AccountProfileForm({ userData, btnText }) {
             id="address"
             placeholder="Address... 150 character (Optional)"
             onChange={(e) => setAddress(e.target.value)}
-            autoComplete="off"
           />
         </div>
       </div>

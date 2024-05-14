@@ -27,9 +27,7 @@ export default async function page() {
     address: userData?.address,
   };
 
-  // user payment mode
-  const userPaymentMode = await fetchUserPaymentMode(userData?._id);
-  const paymentMode = userPaymentMode?.data ? userPaymentMode?.data : null;
+  // console.log(userData);
 
   return (
     <div className="">
@@ -55,16 +53,30 @@ export default async function page() {
           <Button variant="outline">Edit Profile</Button>
         </Link>
       </div>
-      <div>
-        <h2>Your Payment Mode</h2>
-        <p>UPI ID : {paymentMode?.paymentMethod?.upiId}</p>
-        <p>UPI Number : {paymentMode?.paymentMethod?.upiNumber}</p>
-        <p>
-          Bank Account :{" "}
-          {paymentMode?.paymentMethod?.bankAccount?.accountNumber}
-        </p>
-        <p>IFSC : {paymentMode?.paymentMethod?.bankAccount?.ifsc}</p>
-      </div>
+      {userData?.paymentModes?.map((paymentMode, index) => {
+        return (
+          <div key={index} className="my-5">
+            <h2>Payment Mode</h2>
+            <p>View and Update your payment mode</p>
+            <div>
+              <p>UPI: {paymentMode?.paymentMethod?.upiId}</p>
+              <p>UPI Number: {paymentMode?.paymentMethod?.upiNumber}</p>
+              <p>
+                Account Holder Name:{" "}
+                {paymentMode?.paymentMethod?.bankAccount?.accountHolderName}
+              </p>
+              <p>
+                Bank Name: {paymentMode?.paymentMethod?.bankAccount?.bankName}
+              </p>
+              <p>
+                Account Number:{" "}
+                {paymentMode?.paymentMethod?.bankAccount?.accountNumber}
+              </p>
+              <p>IFSC: {paymentMode?.paymentMethod?.bankAccount?.ifsc}</p>
+            </div>
+          </div>
+        );
+      })}
       <div>
         <Link href={"/payment-mode"}>
           <Button variant="outline">Update Payment Mode</Button>
