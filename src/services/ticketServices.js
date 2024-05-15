@@ -14,3 +14,18 @@ export const fetchAllTicketsByUserId = async (userId) => {
     console.log(error.message + " from fetchAllTicketsByUserId\n");
   }
 };
+
+export const fetchTicketById = async (ticketId) => {
+  try {
+    const res = await fetch(`${baseUrl}/api/loan-ticket/${ticketId}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      const { error } = await res.json();
+      throw new Error(error);
+    }
+    return res.json();
+  } catch (error) {
+    console.log(error.message + " from fetchTicketById\n");
+  }
+};
