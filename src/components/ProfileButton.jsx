@@ -15,6 +15,11 @@ import { SignOutButton } from "@clerk/nextjs";
 
 export default function ProfileButton({ userImage, currentUserName }) {
   const router = useRouter();
+  const shortName = currentUserName
+    ?.split(" ")
+    .map((n) => n[0])
+    .join("");
+  // console.log(shortName);
   return (
     <>
       <DropdownMenu>
@@ -24,8 +29,8 @@ export default function ProfileButton({ userImage, currentUserName }) {
               src={userImage}
               alt={`Profile image of ${currentUserName}`}
             />
-            <AvatarFallback>{"AB"}</AvatarFallback>
-          </Avatar>
+            <AvatarFallback>{shortName}</AvatarFallback>
+          </Avatar> 
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className={`font-bold`}>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>

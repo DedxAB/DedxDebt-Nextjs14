@@ -4,14 +4,15 @@ import nodemailer from "nodemailer";
 import { render } from "@react-email/render";
 import Email from "@/email/email";
 
-export const sendEmail = async (
+export const sendEmail = async ({
   borrowerName,
   borrowerEmail,
   text,
   loanAmount,
   loanDate,
-  lender
-) => {
+  lender,
+}) => {
+
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
