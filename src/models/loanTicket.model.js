@@ -70,15 +70,15 @@ const loanTicketSchema = new mongoose.Schema(
     },
     paymentsBack: [
       {
-        paybackDate: {
-          type: Date,
-          required: [true, "Please provide the payment date"],
-          default: Date.now,
-        },
         paybackAmount: {
           type: Number,
           required: [true, "Please provide the payment amount"],
           min: [0, "payment amount must not be less than 0"],
+        },
+        paybackDate: {
+          type: Date,
+          required: [true, "Please provide the payment date"],
+          default: Date.now,
         },
       },
     ],
