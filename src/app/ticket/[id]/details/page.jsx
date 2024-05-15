@@ -2,13 +2,23 @@ import TicketCard from "@/components/TicketCard";
 import { Button } from "@/components/ui/button";
 import { fetchTicketById } from "@/services/ticketServices";
 import { baseUrl } from "@/utils/constants";
+import { currentUser } from "@clerk/nextjs/server";
 import { format } from "date-fns";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function TicketDetails({ params }) {
+  const user = await currentUser();
+
   const { id } = params;
 
   const { data: note } = await fetchTicketById(id);
+  // console.log(note);
+
+  // check if the user is the owner of the ticket, if not redirect to the home page
+  if (user?.emailAddresses[0].emailAddress !== note?.lender?.email) {
+    redirect("/");
+  }
 
   const paymentsBackArray = note?.paymentsBack;
   // Calculate the total payback amount
