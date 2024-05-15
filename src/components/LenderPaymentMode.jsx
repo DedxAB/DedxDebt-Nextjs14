@@ -157,8 +157,15 @@ export default function LenderPaymentMode({ userInfo, paymentMode }) {
           Your payment details will be sent to the borrower mailing address.
         </p>
       </div>
-      <div>
-        <Button onClick={handleSubmit}>Update</Button>
+      <div className="flex items-center gap-3 justify-end">
+        <div>
+          <Button variant="outline" onClick={() => router.back()}>
+            Cancel
+          </Button>
+        </div>
+        <div>
+          <Button onClick={handleSubmit}>Update</Button>
+        </div>
       </div>
     </>
   );

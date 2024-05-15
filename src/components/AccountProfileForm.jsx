@@ -62,7 +62,7 @@ export default function AccountProfileForm({ userData, btnText }) {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="name">Name</Label>
           <Input
@@ -113,8 +113,15 @@ export default function AccountProfileForm({ userData, btnText }) {
           />
         </div>
       </div>
-      <div className="my-5">
-        <Button onClick={postUserFormData}>{btnText}</Button>
+      <div className="my-5 flex items-center gap-3 justify-end">
+        <div>
+          <Button variant="outline" onClick={() => router.back()}>
+            Cancel
+          </Button>
+        </div>
+        <div>
+          <Button onClick={postUserFormData}>{btnText}</Button>
+        </div>
       </div>
     </>
   );

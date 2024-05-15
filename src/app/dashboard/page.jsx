@@ -1,7 +1,8 @@
+import TicketCard from "@/components/TicketCard";
 import { fetchAllTicketsByUserId } from "@/services/ticketServices";
 import { fetchUserByClerkId } from "@/services/userServices";
 import { currentUser } from "@clerk/nextjs/server";
-import dayjs from "dayjs";
+
 
 export default async function Dashboard() {
   const user = await currentUser();
@@ -42,29 +43,7 @@ export default async function Dashboard() {
       </div>
       <div>
         {noteData?.data?.map((note) => (
-          <div key={note._id} className="border p-5 my-3 rounded-md">
-            <h2>Lender Name: {note.lender.name}</h2>
-            <p>Lender email: {note.lender.email}</p>
-            <h2>Borrower: {note.borrowerName}</h2>
-            <p>Address: {note.borrowerAddress}</p>
-            <p>Email: {note.borrowerContactDetails.borrowerEmail}</p>
-            <p>Phone No.: {note.borrowerContactDetails.borrowerPhoneNumber}</p>
-            <p>Loan Amount: Rs.&nbsp;{note.loanAmount}</p>
-            <h3>Reason: {note.loanReason}</h3>
-            <p>Loan Date: {dayjs(note.loanDate).format("MMM D, YYYY")}</p>
-            <p>Payback Status: {note.paybackStatus}</p>
-            <div>
-              {note.paymentsBack.map((payment) => (
-                <div key={payment._id}>
-                  <p>
-                    Payback Date:&nbsp;
-                    {dayjs(payment.paybackDate).format("MMM D, YYYY")}
-                  </p>
-                  <p>Payback Amount: Rs. {payment.paybackAmount}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <TicketCard key={note._id} note={note} />
         ))}
       </div>
     </div>
