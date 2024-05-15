@@ -1,9 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  fetchUserByClerkId,
-  fetchUserPaymentMode,
-} from "@/services/userServices";
+import { fetchUserByClerkId } from "@/services/userServices";
 import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 
