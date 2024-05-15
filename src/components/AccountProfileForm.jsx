@@ -62,7 +62,7 @@ export default function AccountProfileForm({ userData, btnText }) {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="name">Name</Label>
           <Input
@@ -71,7 +71,6 @@ export default function AccountProfileForm({ userData, btnText }) {
             value={name}
             onChange={(e) => setName(e.target.value)}
             id="name"
-            autoComplete="off"
           />
         </div>
         <div>
@@ -92,7 +91,6 @@ export default function AccountProfileForm({ userData, btnText }) {
             id="phoneNumber"
             placeholder="+91 xxxxxxxxxx (Optional)"
             onChange={(e) => setPhoneNumber(e.target.value)}
-            autoComplete="off"
           />
         </div>
         <div>
@@ -103,7 +101,6 @@ export default function AccountProfileForm({ userData, btnText }) {
             id="username"
             placeholder="username... (Optional)"
             onChange={(e) => setUsername(e.target.value)}
-            autoComplete="off"
           />
         </div>
         <div>
@@ -113,12 +110,18 @@ export default function AccountProfileForm({ userData, btnText }) {
             id="address"
             placeholder="Address... 150 character (Optional)"
             onChange={(e) => setAddress(e.target.value)}
-            autoComplete="off"
           />
         </div>
       </div>
-      <div className="my-5">
-        <Button onClick={postUserFormData}>{btnText}</Button>
+      <div className="my-5 flex items-center gap-3 justify-end">
+        <div>
+          <Button variant="outline" onClick={() => router.back()}>
+            Cancel
+          </Button>
+        </div>
+        <div>
+          <Button onClick={postUserFormData}>{btnText}</Button>
+        </div>
       </div>
     </>
   );

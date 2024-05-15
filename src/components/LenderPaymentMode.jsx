@@ -21,6 +21,12 @@ export default function LenderPaymentMode({ userInfo, paymentMode }) {
   const [ifsc, setIfsc] = useState(
     paymentMode?.paymentMethod?.bankAccount?.ifsc || ""
   );
+  const [bankName, setBankName] = useState(
+    paymentMode?.paymentMethod?.bankAccount?.bankName || ""
+  );
+  const [accountHolderName, setAccountHolderName] = useState(
+    paymentMode?.paymentMethod?.bankAccount?.accountHolderName || ""
+  );
 
   const router = useRouter();
 
@@ -42,6 +48,8 @@ export default function LenderPaymentMode({ userInfo, paymentMode }) {
           lender: _id,
           upiId,
           upiNumber,
+          accountHolderName,
+          bankName,
           accountNumber,
           ifsc,
         }),
@@ -92,6 +100,26 @@ export default function LenderPaymentMode({ userInfo, paymentMode }) {
           />
         </div>
         <div>
+          <Label htmlFor="bankName">Bank Name</Label>
+          <Input
+            type="text"
+            id="bankName"
+            name="bankName"
+            onChange={(e) => setBankName(e.target.value)}
+            value={bankName}
+          />
+        </div>
+        <div>
+          <Label htmlFor="accountHolderName">Account Holder Name</Label>
+          <Input
+            type="text"
+            id="accountHolderName"
+            name="accountHolderName"
+            onChange={(e) => setAccountHolderName(e.target.value)}
+            value={accountHolderName}
+          />
+        </div>
+        <div>
           <Label htmlFor="accountNumber">Account Number</Label>
           <Input
             type="password"
@@ -129,8 +157,15 @@ export default function LenderPaymentMode({ userInfo, paymentMode }) {
           Your payment details will be sent to the borrower mailing address.
         </p>
       </div>
-      <div>
-        <Button onClick={handleSubmit}>Update</Button>
+      <div className="flex items-center gap-3 justify-end">
+        <div>
+          <Button variant="outline" onClick={() => router.back()}>
+            Cancel
+          </Button>
+        </div>
+        <div>
+          <Button onClick={handleSubmit}>Update</Button>
+        </div>
       </div>
     </>
   );

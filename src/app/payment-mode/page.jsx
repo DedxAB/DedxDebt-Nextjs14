@@ -14,16 +14,14 @@ export default async function PaymentMode() {
 
   const userInfo = userData?.data ? userData?.data : null;
 
+  if (!userInfo?.onboarded) {
+    redirect("/onboarding");
+  }
   // Fetch user payment method by lender id (User id)
   const userPaymentMethod = await fetchUserPaymentMode(userInfo?._id);
 
-  const paymentMode = userPaymentMethod?.data
-    ? userPaymentMethod?.data
-    : null;
+  const paymentMode = userPaymentMethod?.data ? userPaymentMethod?.data : null;
 
-  if (!userInfo?.onboarded) {
-    redirect("/onboarding");
-  } 
   return (
     <>
       <h2>Payment Mode</h2>

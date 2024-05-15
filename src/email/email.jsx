@@ -7,6 +7,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import { format } from "date-fns";
 import * as React from "react";
 
 const Email = ({ borrowerName, loanAmount, loanDate, lenderName }) => (
@@ -23,7 +24,7 @@ const Email = ({ borrowerName, loanAmount, loanDate, lenderName }) => (
           <Text style={paragraph}>
             We&apos;re writing to let you know about your debt story. You
             borrowed Rs. {loanAmount} on{" "}
-            {new Date(loanDate).toLocaleDateString()}.
+            {format(loanDate, "PPPP")}.
           </Text>
         </Section>
         <Section style={paragraphContent}>

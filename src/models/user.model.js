@@ -54,6 +54,18 @@ const userSchema = new mongoose.Schema(
       trim: [true, "Address must not have spaces"],
       maxlength: [150, "Address must not exceed 150 characters"],
     },
+    loanTickets: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "LoanTicket",
+      },
+    ],
+    paymentModes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "PaymentMode",
+      },
+    ],
     onboarded: {
       type: Boolean,
       default: false,

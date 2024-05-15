@@ -7,7 +7,10 @@ export async function GET(_req, { params }) {
   const { ticketId } = params;
   try {
     await dbConnect();
-    const loanTicket = await LoanTicket.findById(ticketId).populate("lender");
+    const loanTicket = await LoanTicket.findById(ticketId).populate({
+      path: "lender",
+      populate: { path: "paymentModes" },
+    });
     if (!loanTicket) {
       return NextResponse.json(
         { error: "Loan ticket not found" },

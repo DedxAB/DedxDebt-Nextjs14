@@ -1,11 +1,20 @@
 import dbConnect from "@/db/mongodb";
 import PaymentMode from "@/models/paymentMode.model";
+import User from "@/models/user.model";
 import { paymentModeValidation } from "@/validations/paymentMode.validation";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   await dbConnect();
-  const { lender, upiId, upiNumber, accountNumber, ifsc } = await req.json();
+  const {
+    lender,
+    upiId,
+    upiNumber,
+    accountHolderName,
+    bankName,
+    accountNumber,
+    ifsc,
+  } = await req.json();
 
   // console.log(lender, upiId, upiNumber, accountNumber, ifsc);
 
@@ -14,6 +23,8 @@ export async function POST(req) {
     lender,
     upiId,
     upiNumber,
+    accountHolderName,
+    bankName,
     accountNumber,
     ifsc,
   });
@@ -28,6 +39,8 @@ export async function POST(req) {
           upiId,
           upiNumber,
           bankAccount: {
+            accountHolderName,
+            bankName,
             accountNumber,
             ifsc,
           },
@@ -35,6 +48,19 @@ export async function POST(req) {
       },
       { new: true, upsert: true }
     );
+
+    if (paymentMode) {
+      await User.findByIdAndUpdate(
+        { _id: lender },
+        {
+          $push: {
+            paymentModes: paymentMode._id,
+          },
+        },
+        { new: true }
+      );
+    }
+
     return NextResponse.json(
       { message: "Payment details updated successfully", data: paymentMode },
       { status: 201 }

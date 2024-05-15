@@ -30,7 +30,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
   const [confirmEmail, setConfirmEmail] = useState("");
   const [borrowerPhoneNumber, setBorrowerPhoneNumber] = useState("");
   const [borrowerAddress, setBorrowerAddress] = useState("");
-  const [loanAmount, setLoanAmount] = useState(0);
+  const [loanAmount, setLoanAmount] = useState(1);
   const [loanDate, setLoanDate] = useState(Date);
   const [loanReason, setLoanReason] = useState("");
   const [paybackAmount, setPaybackAmount] = useState(0);
@@ -174,7 +174,9 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
         <div className="flex flex-col gap-2">
           <Label htmlFor="loanAmount">Loan Amount 🌟</Label>
           <Input
-            onChange={(e) => setLoanAmount(Number(e.target.value))}
+            onChange={(e) =>
+              setLoanAmount(e.target.value < 1 ? 1 : Number(e.target.value))
+            }
             value={loanAmount}
             type="number"
             placeholder="Enter loan amount"
@@ -223,7 +225,9 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
         <div className="flex flex-col gap-2">
           <Label htmlFor="paymentAmount">Payback Amount</Label>
           <Input
-            onChange={(e) => setPaybackAmount(Number(e.target.value))}
+            onChange={(e) =>
+              setPaybackAmount(e.target.value < 0 ? 0 : Number(e.target.value))
+            }
             value={paybackAmount}
             type="number"
             placeholder="Enter payment amount (optional)"

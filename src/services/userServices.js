@@ -21,11 +21,11 @@ export const fetchUserPaymentMode = async (lenderId) => {
       cache: "no-store",
     });
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message);
+      const {error} = await response.json();
+      throw new Error(error);
     }
     return response.json();
   } catch (error) {
-    console.log(`${error} from fetchUserPaymentMode\n`);
+    console.log(`${error.message} from fetchUserPaymentMode\n`);
   }
 };
