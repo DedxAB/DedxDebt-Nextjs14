@@ -25,7 +25,7 @@ export const validateLoanTicket = (
     error = "Please provide a valid email";
     return error;
   }
-  if (loanAmount === 0 || isNaN(loanAmount)) {
+  if (!loanAmount || loanAmount <= 0 || isNaN(loanAmount)) {
     error = "Loan amount must be at least 1";
     return error;
   }
