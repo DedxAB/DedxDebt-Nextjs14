@@ -4,8 +4,6 @@ import { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-
-import { format } from "date-fns";
 import dayjs from "dayjs";
 
 export default function UpdateTicketForm({ ticket }) {
