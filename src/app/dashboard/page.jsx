@@ -3,14 +3,13 @@ import { fetchAllTicketsByUserId } from "@/services/ticketServices";
 import { fetchUserByClerkId } from "@/services/userServices";
 import { currentUser } from "@clerk/nextjs/server";
 
-
 export default async function Dashboard() {
   const user = await currentUser();
 
   const userData = await fetchUserByClerkId(user?.id);
   // console.log(userData?.data?._id);
 
-  const noteData = await fetchAllTicketsByUserId(userData?.data?._id);
+  const ticketData = await fetchAllTicketsByUserId(userData?.data?._id);
   // console.log(noteData);
 
   /*
@@ -42,8 +41,8 @@ export default async function Dashboard() {
         <h2>Here is your created loan ticket</h2>
       </div>
       <div>
-        {noteData?.data?.map((note) => (
-          <TicketCard key={note._id} note={note} />
+        {ticketData?.data?.map((ticket) => (
+          <TicketCard key={ticket._id} ticket={ticket} />
         ))}
       </div>
     </div>

@@ -18,10 +18,10 @@ export default async function UpdateTicket({ params }) {
     <div>
       UpdateTicket
       <div>
-        <TicketCard note={ticket} />
+        <TicketCard ticket={ticket} />
       </div>
       <div>
-        <UpdateTicketForm note={ticket} />
+        <UpdateTicketForm ticket={ticket} />
       </div>
     </div>
   );

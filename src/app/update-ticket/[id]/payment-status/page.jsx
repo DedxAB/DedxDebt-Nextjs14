@@ -18,10 +18,10 @@ export default async function PaymentStatusUpdate({ params }) {
     <div>
       Update Status
       <div>
-        <TicketCard note={ticket} />
+        <TicketCard ticket={ticket} />
       </div>
       <div>
-        <UpdateStatusForm note={ticket} />
+        <UpdateStatusForm ticket={ticket} />
       </div>
     </div>
   );

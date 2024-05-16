@@ -22,6 +22,7 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { sendEmail } from "@/actions/email.action";
+import dayjs from "dayjs";
 
 export default function LoanTicketForm({ lenderId, currentUserData }) {
   const [paybackStatus, setPaybackStatus] = useState("pending");
@@ -31,10 +32,10 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
   const [borrowerPhoneNumber, setBorrowerPhoneNumber] = useState("");
   const [borrowerAddress, setBorrowerAddress] = useState("");
   const [loanAmount, setLoanAmount] = useState(1);
-  const [loanDate, setLoanDate] = useState(Date);
+  const [loanDate, setLoanDate] = useState(new Date());
   const [loanReason, setLoanReason] = useState("");
   const [paybackAmount, setPaybackAmount] = useState(0);
-  const [paybackDate, setPaybackDate] = useState(Date);
+  const [paybackDate, setPaybackDate] = useState(new Date());
 
   const router = useRouter();
 
@@ -105,8 +106,8 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
   };
   return (
     <div className="my-5">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        <div className="flex flex-col gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="flex flex-col gap-3">
           <Label htmlFor="lender">Your Email 🌟</Label>
           <Input
             type="text"
@@ -116,7 +117,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             disabled
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <Label htmlFor="borrowerName">Borrower Name 🌟</Label>
           <Input
             onChange={(e) => setBorrowerName(e.target.value)}
@@ -127,7 +128,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             name="borrowerName"
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <Label htmlFor="email">Borrower Email 🌟</Label>
           <Input
             onChange={(e) => setBorrowerEmail(e.target.value)}
@@ -138,7 +139,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             name="borrowerEmail"
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <Label htmlFor="confirmEmail">Confirm Email 🌟</Label>
           <Input
             onChange={(e) => setConfirmEmail(e.target.value)}
@@ -150,7 +151,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             name="confirmEmail"
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <Label htmlFor="phoneNumber">Borrower Phone Number</Label>
           <Input
             onChange={(e) => setBorrowerPhoneNumber(e.target.value)}
@@ -161,7 +162,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             name="borrowerPhoneNumber"
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <Label htmlFor="address">Borrower Address</Label>
           <Textarea
             onChange={(e) => setBorrowerAddress(e.target.value)}
@@ -171,11 +172,11 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             name="borrowerAddress"
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="loanAmount">Loan Amount 🌟</Label>
+        <div className="flex flex-col gap-3">
+          <Label htmlFor="loanAmount">Borrowed Amount 🌟</Label>
           <Input
             onChange={(e) =>
-              setLoanAmount(e.target.value < 1 ? 1 : Number(e.target.value))
+              setLoanAmount(e.target.value && parseInt(e.target.value))
             }
             value={loanAmount}
             type="number"
@@ -185,8 +186,8 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             name="loanAmount"
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <Label>Loan Date 🌟</Label>
+        <div className="flex flex-col gap-3">
+          <Label>Borrowed Date 🌟</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -197,7 +198,11 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {loanDate ? format(loanDate, "PPPP") : <span>Pick a date</span>}
+                {loanDate ? (
+                  dayjs(loanDate).format("MMM DD, YYYY")
+                ) : (
+                  <span>Pick a date</span>
+                )}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
@@ -210,8 +215,8 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             </PopoverContent>
           </Popover>
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="loanReason">Loan Reason</Label>
+        <div className="flex flex-col gap-3">
+          <Label htmlFor="loanReason">Reason</Label>
           <Textarea
             onChange={(e) => setLoanReason(e.target.value)}
             value={loanReason}
@@ -222,11 +227,11 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="paymentAmount">Payback Amount</Label>
+        <div className="flex flex-col gap-3">
+          <Label htmlFor="paymentAmount">Return Amount</Label>
           <Input
             onChange={(e) =>
-              setPaybackAmount(e.target.value < 0 ? 0 : Number(e.target.value))
+              setPaybackAmount(e.target.value && parseInt(e.target.value))
             }
             value={paybackAmount}
             type="number"
@@ -236,8 +241,8 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             name="paymentAmount"
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <Label>Payback Status 🌟</Label>
+        <div className="flex flex-col gap-3">
+          <Label>Return Amount Status 🌟</Label>
           <Select
             onValueChange={(newValue) => setPaybackStatus(newValue)}
             // defaultValue={paybackStatus}
@@ -247,7 +252,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Status</SelectLabel>
+                <SelectLabel>Amount Return Status</SelectLabel>
                 <SelectItem value="pending" className={`cursor-pointer`}>
                   👨‍🎤&nbsp;Pending
                 </SelectItem>
@@ -261,8 +266,8 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex flex-col gap-2">
-          <Label>Payback Date</Label>
+        <div className="flex flex-col gap-3">
+          <Label>Return Amount Date</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -274,7 +279,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {paybackDate ? (
-                  format(paybackDate, "PPPP")
+                  dayjs(paybackDate).format("MMM DD, YYYY") 
                 ) : (
                   <span>Pick a date</span>
                 )}

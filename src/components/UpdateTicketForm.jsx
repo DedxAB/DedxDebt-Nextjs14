@@ -4,27 +4,21 @@ import { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
-import { format } from "date-fns";
 
-export default function UpdateTicketForm({ note }) {
-  const lenderName = note?.lender?.name;
-  const lenderEmail = note?.lender?.email;
-  const borrowerName = note?.borrowerName;
-  const borrowerAddress = note?.borrowerAddress;
-  const borrowerEmail = note?.borrowerContactDetails?.borrowerEmail;
-  const borrowerPhoneNumber = note?.borrowerContactDetails?.borrowerPhoneNumber;
-  const loanAmount = note?.loanAmount;
-  const loanReason = note?.loanReason;
-  const loanDate = note?.loanDate;
+import { format } from "date-fns";
+import dayjs from "dayjs";
+
+export default function UpdateTicketForm({ ticket }) {
+  const lenderName = ticket?.lender?.name;
+  const lenderEmail = ticket?.lender?.email;
+  const borrowerName = ticket?.borrowerName;
+  const borrowerAddress = ticket?.borrowerAddress;
+  const borrowerEmail = ticket?.borrowerContactDetails?.borrowerEmail;
+  const borrowerPhoneNumber =
+    ticket?.borrowerContactDetails?.borrowerPhoneNumber;
+  const loanAmount = ticket?.loanAmount;
+  const loanReason = ticket?.loanReason;
+  const loanDate = ticket?.loanDate;
 
   // Only these field values can be updated
   const [newBorrowerAddress, setNewBorrowerAddress] = useState(borrowerAddress);
@@ -32,7 +26,7 @@ export default function UpdateTicketForm({ note }) {
   const [newLoanReason, setNewLoanReason] = useState(loanReason);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 my-5">
       <div className="flex flex-col gap-2">
         <Label htmlFor="lenderName">Your Name</Label>
         <Input id="lenderName" value={lenderName} disabled />
@@ -74,19 +68,19 @@ export default function UpdateTicketForm({ note }) {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="loanAmount">Loan Amount</Label>
+        <Label htmlFor="loanAmount">Borrowed Amount</Label>
         <Input
           id="loanAmount"
           value={newLoanAmount}
           type="number"
           onChange={(e) =>
-            setNewLoanAmount(e.target.value < 1 ? 1 : Number(e.target.value))
+            setNewLoanAmount(e.target.value && parseInt(e.target.value))
           }
           className="font-semibold"
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="loanReason">Loan Reason</Label>
+        <Label htmlFor="loanReason">Reason</Label>
         <Textarea
           id="loanReason"
           value={newLoanReason}
@@ -96,7 +90,11 @@ export default function UpdateTicketForm({ note }) {
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="loanDate">Loan Date</Label>
-        <Input id="loanDate" value={format(loanDate, "PPPP")} disabled />
+        <Input
+          id="loanDate"
+          value={dayjs(loanDate).format("MMM DD, YYYY")}
+          disabled
+        />
       </div>
     </div>
   );

@@ -12,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { format } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { CalendarIcon } from "lucide-react";
@@ -20,10 +19,11 @@ import { Calendar } from "./ui/calendar";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
 
-const UpdateStatusForm = ({ note }) => {
-  const paybackStatus = note?.paybackStatus;
-  const paybackAmountArray = note?.paymentsBack; // Array of Payback Amounts
+const UpdateStatusForm = ({ ticket }) => {
+  const paybackStatus = ticket?.paybackStatus;
+  const paybackAmountArray = ticket?.paymentsBack; // Array of Payback Amounts
 
   // Calculate the total payback amount
   let totalPaybackAmount = 0;
@@ -32,10 +32,10 @@ const UpdateStatusForm = ({ note }) => {
   });
 
   // Calculate the left amount to be paid
-  const leftAmount = note?.loanAmount - totalPaybackAmount;
+  const leftAmount = ticket?.loanAmount - totalPaybackAmount;
 
   const [newPaybackAmount, setNewPaybackAmount] = useState(1);
-  const [newPaybackDate, setNewPaybackDate] = useState(Date);
+  const [newPaybackDate, setNewPaybackDate] = useState(new Date());
   const [newPaybackStatus, setNewPaybackStatus] = useState(paybackStatus);
 
   const router = useRouter();
@@ -51,7 +51,7 @@ const UpdateStatusForm = ({ note }) => {
     // Update the payback status
     const toastId = toast.loading("Updating Payback Status...");
     try {
-      const res = await fetch(`/api/loan-ticket/${note._id}/update-payback`, {
+      const res = await fetch(`/api/loan-ticket/${ticket._id}/update-payback`, {
         method: "PATCH",
         headers: {
           "content-type": "application/json",
@@ -69,56 +69,59 @@ const UpdateStatusForm = ({ note }) => {
       toast.success("Payback status updated successfully", {
         id: toastId,
       });
-      router.back();
-      router.refresh();
+      router.push(`/ticket/${ticket._id}/details`);
     } catch (error) {
       toast.error("Failed to update payback status", {
         id: toastId,
       });
+    } finally {
+      router.refresh();
     }
   };
 
   return (
     <>
-      {paybackAmountArray.length > 0 &&
-        paybackAmountArray.map((p, index) => {
-          return (
-            <div key={index} className="flex items-center gap-2 my-3">
-              <div className="flex flex-col gap-2">
-                <h1>Payback Amount {index + 1}</h1>
-                <p
-                  className={`${
-                    paybackStatus === "pending"
-                      ? "bg-red-200"
-                      : paybackStatus === "partiallyPaid"
-                      ? "bg-yellow-200"
-                      : "bg-green-200"
-                  } text-black font-semibold px-4 py-2 rounded-md text-center`}
-                >
-                  Rs. {p.paybackAmount}
-                </p>
+      <div className="flex flex-wrap gap-3 my-5">
+        {paybackAmountArray.length > 0 &&
+          paybackAmountArray.map((p, index) => {
+            return (
+              <div key={index} className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-col gap-2">
+                  <h1>Return Amount {index + 1}</h1>
+                  <p
+                    className={`${
+                      paybackStatus === "pending"
+                        ? "bg-red-200"
+                        : paybackStatus === "partiallyPaid"
+                        ? "bg-yellow-200"
+                        : "bg-green-200"
+                    } text-black font-semibold px-3 py-1 rounded-md text-center`}
+                  >
+                    Rs. {p.paybackAmount}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <h1>Return Date {index + 1}</h1>
+                  <p
+                    className={`${
+                      paybackStatus === "pending"
+                        ? "bg-red-200"
+                        : paybackStatus === "partiallyPaid"
+                        ? "bg-yellow-200"
+                        : "bg-green-200"
+                    } text-black font-semibold px-3 py-1 rounded-md`}
+                  >
+                    {dayjs(p.paybackDate).format("MMM D, YYYY")}
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-col gap-2">
-                <h1>Payback Date {index + 1}</h1>
-                <p
-                  className={`${
-                    paybackStatus === "pending"
-                      ? "bg-red-200"
-                      : paybackStatus === "partiallyPaid"
-                      ? "bg-yellow-200"
-                      : "bg-green-200"
-                  } text-black font-semibold px-4 py-2 rounded-md`}
-                >
-                  {format(p.paybackDate, "PPPP")}
-                </p>
-              </div>
-            </div>
-          );
-        })}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div className="flex flex-col gap-2">
+            );
+          })}
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div className="flex flex-col gap-3">
           <Label htmlFor="paybackAmount">
-            Payback Amount (
+            Return Amount (
             <span className="text-primary font-semibold">Rs. {leftAmount}</span>{" "}
             left to be paid)
           </Label>
@@ -127,19 +130,13 @@ const UpdateStatusForm = ({ note }) => {
             value={newPaybackAmount}
             type="number"
             onChange={(e) =>
-              setNewPaybackAmount(
-                e.target.value < 1
-                  ? 1
-                  : parseInt(e.target.value) > leftAmount
-                  ? leftAmount
-                  : parseInt(e.target.value)
-              )
+              setNewPaybackAmount(e.target.value && parseInt(e.target.value))
             }
             className="font-semibold"
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <Label>Payback Date 🌟</Label>
+        <div className="flex flex-col gap-3">
+          <Label>Return Amount Date 🌟</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -151,7 +148,7 @@ const UpdateStatusForm = ({ note }) => {
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {newPaybackDate ? (
-                  format(newPaybackDate, "PPPP")
+                  dayjs(newPaybackDate).format("dddd MMM D, YYYY")
                 ) : (
                   <span>Pick a date</span>
                 )}
@@ -167,8 +164,8 @@ const UpdateStatusForm = ({ note }) => {
             </PopoverContent>
           </Popover>
         </div>
-        <div className="flex flex-col gap-2">
-          <Label>Payback Status 🌟</Label>
+        <div className="flex flex-col gap-3">
+          <Label>Amount Return Status 🌟</Label>
           <Select
             onValueChange={(newValue) => setNewPaybackStatus(newValue)}
             defaultValue={newPaybackStatus}
@@ -197,7 +194,7 @@ const UpdateStatusForm = ({ note }) => {
         <Button variant="outline" onClick={() => router.back()}>
           Cancel
         </Button>
-        <Button onClick={handleUpdatePayback}>Update Payback</Button>
+        <Button onClick={handleUpdatePayback}>Update</Button>
       </div>
     </>
   );

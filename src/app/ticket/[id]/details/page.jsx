@@ -12,15 +12,15 @@ export default async function TicketDetails({ params }) {
 
   const { id } = params;
 
-  const { data: note } = await fetchTicketById(id);
-  // console.log(note);
+  const { data: ticket } = await fetchTicketById(id);
+  // console.log(ticket);
 
   // check if the user is the owner of the ticket, if not redirect to the home page
-  if (user?.emailAddresses[0].emailAddress !== note?.lender?.email) {
+  if (user?.emailAddresses[0].emailAddress !== ticket?.lender?.email) {
     redirect("/");
   }
 
-  const paymentsBackArray = note?.paymentsBack;
+  const paymentsBackArray = ticket?.paymentsBack;
   // Calculate the total payback amount
   let totalPaybackAmount = 0;
   paymentsBackArray.forEach((p) => {
@@ -28,25 +28,25 @@ export default async function TicketDetails({ params }) {
   });
 
   // Calculate the left amount to be paid
-  const leftAmount = note?.loanAmount - totalPaybackAmount;
+  const leftAmount = ticket?.loanAmount - totalPaybackAmount;
   // console.log(totalPaybackAmount, leftAmount);
 
   return (
     <>
       <div>
-        <TicketCard note={note} />
+        <TicketCard ticket={ticket} />
       </div>
 
       {/* Updating the ticket details */}
-      <div className="flex gap-3 my-3">
-        <Link href={`${baseUrl}/update-ticket/${note?._id}`}>
+      <div className="flex gap-3 my-3 justify-end">
+        <Link href={`${baseUrl}/update-ticket/${ticket?._id}`}>
           <Button>Update</Button>
         </Link>
         <Button>Delete</Button>
       </div>
 
       {/* All payback details will be shown here */}
-      <div className="my-3">
+      <div className="my-3 flex flex-wrap gap-3">
         {paymentsBackArray?.length > 0 ? (
           paymentsBackArray?.map((p, index) => {
             return (
@@ -55,31 +55,31 @@ export default async function TicketDetails({ params }) {
                 className="flex items-center gap-2 flex-wrap justify-start"
               >
                 <div className="flex flex-col gap-2 my-2">
-                  <h1>Payback Amount {index + 1}</h1>
+                  <h1>Return Amount {index + 1}</h1>
                   <p
                     className={`${
-                      note?.paybackStatus === "pending"
+                      ticket?.paybackStatus === "pending"
                         ? "bg-red-200"
-                        : note?.paybackStatus === "partiallyPaid"
+                        : ticket?.paybackStatus === "partiallyPaid"
                         ? "bg-yellow-200"
                         : "bg-green-200"
-                    } text-black font-semibold py-2 px-4 rounded-md text-center`}
+                    } text-black font-semibold py-1 px-3 rounded-md text-center`}
                   >
                     Rs. {p.paybackAmount}
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 my-2">
-                  <h1>Payback Date {index + 1}</h1>
+                  <h1>Return Date {index + 1}</h1>
                   <p
                     className={`${
-                      note?.paybackStatus === "pending"
+                      ticket?.paybackStatus === "pending"
                         ? "bg-red-200"
-                        : note?.paybackStatus === "partiallyPaid"
+                        : ticket?.paybackStatus === "partiallyPaid"
                         ? "bg-yellow-200"
                         : "bg-green-200"
-                    } text-black font-semibold py-2 px-4 rounded-md`}
+                    } text-black font-semibold py-1 px-3 rounded-md`}
                   >
-                    {format(p.paybackDate, "PPPP")}
+                    {format(p.paybackDate, "PPP")}
                   </p>
                 </div>
               </div>
@@ -90,33 +90,33 @@ export default async function TicketDetails({ params }) {
         )}
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <div className="">
-          <h1>Payback Status</h1>
+      <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col gap-1">
+          <h1>Return Amount Status</h1>
           <p
             className={`${
-              note?.paybackStatus === "pending"
+              ticket?.paybackStatus === "pending"
                 ? "bg-red-200"
-                : note?.paybackStatus === "partiallyPaid"
+                : ticket?.paybackStatus === "partiallyPaid"
                 ? "bg-yellow-200"
                 : "bg-green-200"
             } text-black font-semibold py-2 px-4 text-center rounded-md`}
           >
-            {note?.paybackStatus === "pending"
+            {ticket?.paybackStatus === "pending"
               ? "Pending"
-              : note?.paybackStatus === "partiallyPaid"
+              : ticket?.paybackStatus === "partiallyPaid"
               ? "Partially Paid"
               : "Fully Paid"}
           </p>
         </div>
 
-        <div>
+        <div className="flex gap-1 flex-col">
           <h1>Total Paid Amount</h1>
           <p className="bg-green-200 text-black font-semibold py-2 px-4 text-center rounded-md">
             Rs. {totalPaybackAmount}
           </p>
         </div>
-        <div>
+        <div className="flex flex-col gap-1">
           <h1>Left Amount to be paid</h1>
           <p className="bg-red-200 text-black font-semibold text-center py-2 px-4 rounded-md">
             Rs. {leftAmount}
@@ -125,10 +125,10 @@ export default async function TicketDetails({ params }) {
       </div>
 
       {/* Updating the status of the ticket */}
-      <div className="my-3 flex flex-col gap-2">
+      <div className="my-3 flex flex-col gap-2 items-end">
         <h1>Want to update status? </h1>
         <div>
-          <Link href={`${baseUrl}/update-ticket/${note?._id}/payment-status`}>
+          <Link href={`${baseUrl}/update-ticket/${ticket?._id}/payment-status`}>
             <Button>Update Status</Button>
           </Link>
         </div>

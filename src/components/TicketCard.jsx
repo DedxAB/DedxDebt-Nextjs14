@@ -1,36 +1,42 @@
 "use client";
 
 import dayjs from "dayjs";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export default function TicketCard({ note }) {
+export default function TicketCard({ ticket }) {
   const router = useRouter();
-  const pathname = usePathname();
 
   return (
     <div
       className="border p-5 my-3 rounded-md cursor-pointer"
-      onClick={() => router.push(`/ticket/${note?._id}/details`)}
+      onClick={() => router.push(`/ticket/${ticket?._id}/details`)}
     >
-      <h2>Lender Name: {note.lender.name}</h2>
-      <p>Lender email: {note.lender.email}</p>
-      <h2>Borrower: {note.borrowerName}</h2>
-      <p>Address: {note.borrowerAddress}</p>
-      <p>Email: {note.borrowerContactDetails.borrowerEmail}</p>
-      <p>Phone No.: {note.borrowerContactDetails.borrowerPhoneNumber}</p>
-      <p>Loan Amount: Rs.&nbsp;{note.loanAmount}</p>
-      <h3>Reason: {note.loanReason}</h3>
-      <p>Loan Date: {dayjs(note.loanDate).format("MMM D, YYYY")}</p>
-      {/* {pathname === `/ticket/${note._id}/details` && (
+      {ticket?.lender?.name && <h2>Lender Name: {ticket?.lender?.name}</h2>}
+      {ticket?.lender?.email && <p>Lender email: {ticket?.lender?.email}</p>}
+      {ticket?.borrowerName && <h2>Borrower: {ticket?.borrowerName}</h2>}
+      {ticket?.borrowerAddress && <p>Address: {ticket?.borrowerAddress}</p>}
+      {ticket?.loanAmount && <p>Borrowed Amount: Rs. {ticket?.loanAmount}</p>}
+      {ticket?.loanReason && <p>Reason: {ticket?.loanReason}</p>}
+      {ticket?.borrowerContactDetails?.borrowerEmail && (
+        <p>Email: {ticket?.borrowerContactDetails?.borrowerEmail}</p>
+      )}
+      {ticket?.borrowerContactDetails?.borrowerPhoneNumber && (
+        <p>
+          Phone Number: {ticket?.borrowerContactDetails?.borrowerPhoneNumber}
+        </p>
+      )}
+
+      <p>Loan Date: {dayjs(ticket?.loanDate).format("MMM D, YYYY")}</p>
+      {/* {pathname === `/ticket/${ticket._id}/details` && (
         <>
           <p>
             Payback Status:{" "}
-            {note.paybackStatus === "partiallyPaid"
+            {ticket.paybackStatus === "partiallyPaid"
               ? "Some Paid"
-              : note.paybackStatus}
+              : ticket.paybackStatus}
           </p>
           <div>
-            {note.paymentsBack.map((payment) => (
+            {ticket.paymentsBack.map((payment) => (
               <div key={payment._id}>
                 <p>
                   Payback Date:&nbsp;

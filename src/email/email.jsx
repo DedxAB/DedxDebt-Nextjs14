@@ -7,7 +7,7 @@ import {
   Section,
   Text,
 } from "@react-email/components";
-import { format } from "date-fns";
+import dayjs from "dayjs";
 import * as React from "react";
 
 const Email = ({ borrowerName, loanAmount, loanDate, lenderName }) => (
@@ -24,7 +24,9 @@ const Email = ({ borrowerName, loanAmount, loanDate, lenderName }) => (
           <Text style={paragraph}>
             We&apos;re writing to let you know about your debt story. You
             borrowed Rs. {loanAmount} on{" "}
-            {format(loanDate, "PPPP")}.
+            {loanDate
+              ? dayjs(loanDate).format("dddd MMM DD, YYYY")
+              : dayjs(new Date()).format("dddd MMM DD, YYYY")}
           </Text>
         </Section>
         <Section style={paragraphContent}>
