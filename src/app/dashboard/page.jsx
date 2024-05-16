@@ -42,7 +42,7 @@ export default async function Dashboard() {
       </div>
       <div>
         {ticketData?.data?.map((ticket) => (
-          <TicketCard key={ticket._id} ticket={ticket} />
+          <TicketCard key={ticket?._id} ticket={ticket} />
         ))}
       </div>
     </div>

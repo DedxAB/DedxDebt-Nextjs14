@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { fetchTicketById } from "@/services/ticketServices";
 import { baseUrl } from "@/utils/constants";
 import { currentUser } from "@clerk/nextjs/server";
-import { format } from "date-fns";
+import dayjs from "dayjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -79,7 +79,7 @@ export default async function TicketDetails({ params }) {
                         : "bg-green-200"
                     } text-black font-semibold py-1 px-3 rounded-md`}
                   >
-                    {format(p.paybackDate, "PPP")}
+                    {dayjs(p.paybackDate).format("dddd MMMM D, YYYY")}
                   </p>
                 </div>
               </div>
