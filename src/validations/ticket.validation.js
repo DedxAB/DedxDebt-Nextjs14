@@ -2,7 +2,8 @@ export const validateLoanTicket = (
   borrowerName,
   borrowerEmail,
   loanAmount,
-  lender
+  lender,
+  paybackAmount
 ) => {
   let error = "";
   const emailRegex =
@@ -26,11 +27,15 @@ export const validateLoanTicket = (
     return error;
   }
   if (!loanAmount || loanAmount <= 0 || isNaN(loanAmount)) {
-    error = "Loan amount must be at least 1";
+    error = "Borrowed amount must be at least 1";
     return error;
   }
   if (!lender || typeof lender !== "string") {
     error = "Please provide the lender's name";
+    return error;
+  }
+  if (paybackAmount && (paybackAmount < 0 || isNaN(paybackAmount))) {
+    error = "Return amount must not less than 0";
     return error;
   }
 };
