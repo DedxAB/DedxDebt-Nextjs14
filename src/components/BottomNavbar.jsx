@@ -19,7 +19,7 @@ export default async function BottomNavbar() {
         <div className="px-2 py-1 border rounded-full cursor-pointer hover:border-primary">
           <Link href={`/create-ticket`}>Create Ticket</Link>
         </div>
-        {/* </SignIn> */}
+        {/* </SignIn> */}  
         {user && (
           <>
             <div className="cursor-pointer">

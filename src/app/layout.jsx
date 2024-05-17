@@ -31,11 +31,11 @@ export default function RootLayout({ children }) {
             <div className="w-full sticky top-0 left-0 backdrop-filter backdrop-blur-lg bg-opacity-30 border-b z-20">
               <Navbar />
             </div>
-            <main className="max-w-3xl mx-auto my-5 px-4 min-h-[100vh] mb-20 sm:mb-0">
+            <main className="max-w-3xl mx-auto my-5 mb-44 sm:mb-5 px-4 min-h-[100vh]">
               {children}
             </main>
             <Toaster richColors position="top-right" closeButton />
-            <div className="fixed bottom-0 w-full z-10 backdrop-filter backdrop-blur-lg bg-opacity-30 border-t sm:hidden">
+            <div className="fixed bottom-0 w-full z-20 backdrop-filter backdrop-blur-lg bg-opacity-30 border-t sm:hidden">
               <BottomNavbar />
             </div>
             <div className="w-full border-t mt-16 hidden sm:block">
