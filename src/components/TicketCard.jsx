@@ -8,7 +8,7 @@ export default function TicketCard({ ticket }) {
 
   return (
     <div
-      className="border p-5 my-3 rounded-md cursor-pointer"
+      className="border px-5 py-3 my-3 rounded-md cursor-pointer"
       onClick={() => router.push(`/ticket/${ticket?._id}/details`)}
     >
       {ticket?.lender?.name && <h2>Lender Name: {ticket?.lender?.name}</h2>}

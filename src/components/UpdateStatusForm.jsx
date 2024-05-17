@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
+import ReturnAmountCard from "./ReturnAmountCard";
 
 const UpdateStatusForm = ({ ticket }) => {
   const paybackStatus = ticket?.paybackStatus;
@@ -51,17 +52,20 @@ const UpdateStatusForm = ({ ticket }) => {
     // Update the payback status
     const toastId = toast.loading("Updating return status...");
     try {
-      const res = await fetch(`/api/loan-ticket/${ticket?._id}/update-payback`, {
-        method: "PATCH",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          paybackStatus: newPaybackStatus,
-          paybackAmount: newPaybackAmount,
-          paybackDate: newPaybackDate,
-        }),
-      });
+      const res = await fetch(
+        `/api/loan-ticket/${ticket?._id}/update-payback`,
+        {
+          method: "PATCH",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            paybackStatus: newPaybackStatus,
+            paybackAmount: newPaybackAmount,
+            paybackDate: newPaybackDate,
+          }),
+        }
+      );
       if (!res.ok) {
         const { error } = await res.json();
         throw new Error(error);
@@ -81,44 +85,20 @@ const UpdateStatusForm = ({ ticket }) => {
 
   return (
     <>
-      <div className="flex flex-wrap gap-3 my-5">
+      <div className="my-3 flex flex-wrap gap-3 border px-5 py-3 rounded-md">
         {paybackAmountArray.length > 0 &&
           paybackAmountArray.map((p, index) => {
             return (
-              <div key={index} className="flex flex-wrap items-center gap-2">
-                <div className="flex flex-col gap-2">
-                  <h1>Return Amount {index + 1}</h1>
-                  <p
-                    className={`${
-                      paybackStatus === "pending"
-                        ? "bg-red-200"
-                        : paybackStatus === "partiallyPaid"
-                        ? "bg-yellow-200"
-                        : "bg-green-200"
-                    } text-black font-semibold px-3 py-1 rounded-md text-center`}
-                  >
-                    Rs. {p.paybackAmount}
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <h1>Return Date {index + 1}</h1>
-                  <p
-                    className={`${
-                      paybackStatus === "pending"
-                        ? "bg-red-200"
-                        : paybackStatus === "partiallyPaid"
-                        ? "bg-yellow-200"
-                        : "bg-green-200"
-                    } text-black font-semibold px-3 py-1 rounded-md`}
-                  >
-                    {dayjs(p.paybackDate).format("MMM D, YYYY")}
-                  </p>
-                </div>
-              </div>
+              <ReturnAmountCard
+                key={index}
+                p={p}
+                index={index}
+                paybackStatus={paybackStatus}
+              />
             );
           })}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 my-5">
         <div className="flex flex-col gap-3">
           <Label htmlFor="paybackAmount">
             Return Amount (

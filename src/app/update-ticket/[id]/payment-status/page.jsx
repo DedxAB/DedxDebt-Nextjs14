@@ -17,12 +17,12 @@ export default async function PaymentStatusUpdate({ params }) {
   return (
     <div>
       Update Status
-      <div>
+      <>
         <TicketCard ticket={ticket} />
-      </div>
-      <div>
+      </>
+      <>
         <UpdateStatusForm ticket={ticket} />
-      </div>
+      </>
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import DeleteTicket from "@/components/DeleteTicket";
+import ReturnAmountCard from "@/components/ReturnAmountCard";
 import TicketCard from "@/components/TicketCard";
 import { Button } from "@/components/ui/button";
 import { fetchTicketById } from "@/services/ticketServices";
 import { baseUrl } from "@/utils/constants";
 import { currentUser } from "@clerk/nextjs/server";
-import dayjs from "dayjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -49,43 +49,16 @@ export default async function TicketDetails({ params }) {
       </div>
 
       {/* All payback details will be shown here */}
-      <div className="my-3 flex flex-wrap gap-3">
+      <div className="my-3 flex flex-wrap gap-3 border px-5 py-3 rounded-md">
         {paymentsBackArray?.length > 0 ? (
           paymentsBackArray?.map((p, index) => {
             return (
-              <div
+              <ReturnAmountCard
                 key={index}
-                className="flex items-center gap-2 flex-wrap justify-start"
-              >
-                <div className="flex flex-col gap-2 my-2">
-                  <h1>Return Amount {index + 1}</h1>
-                  <p
-                    className={`${
-                      ticket?.paybackStatus === "pending"
-                        ? "bg-red-200"
-                        : ticket?.paybackStatus === "partiallyPaid"
-                        ? "bg-yellow-200"
-                        : "bg-green-200"
-                    } text-black font-semibold py-1 px-3 rounded-md text-center`}
-                  >
-                    Rs. {p.paybackAmount}
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 my-2">
-                  <h1>Return Date {index + 1}</h1>
-                  <p
-                    className={`${
-                      ticket?.paybackStatus === "pending"
-                        ? "bg-red-200"
-                        : ticket?.paybackStatus === "partiallyPaid"
-                        ? "bg-yellow-200"
-                        : "bg-green-200"
-                    } text-black font-semibold py-1 px-3 rounded-md`}
-                  >
-                    {dayjs(p.paybackDate).format("dddd MMMM D, YYYY")}
-                  </p>
-                </div>
-              </div>
+                p={p}
+                index={index}
+                paybackStatus={ticket?.paybackStatus}
+              />
             );
           })
         ) : (
@@ -93,7 +66,8 @@ export default async function TicketDetails({ params }) {
         )}
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      {/* Return Amount Status */}
+      <div className="flex flex-wrap gap-3 border py-3 px-5 rounded-md">
         <div className="flex flex-col gap-1">
           <h1>Return Amount Status</h1>
           <p
