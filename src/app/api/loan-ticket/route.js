@@ -26,7 +26,8 @@ export async function POST(req) {
     borrowerName,
     borrowerEmail,
     loanAmount,
-    lender
+    lender,
+    paybackAmount
   );
   if (error) {
     return NextResponse.json({ error }, { status: 400 });

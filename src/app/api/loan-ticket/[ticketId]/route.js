@@ -26,3 +26,33 @@ export async function GET(_req, { params }) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(_req, { params }) {
+  const { ticketId } = params;
+  try {
+    await dbConnect();
+    const deletedTicket = await LoanTicket.findByIdAndDelete(ticketId);
+    if (!deletedTicket) {
+      return NextResponse.json(
+        { error: "Loan ticket not found" },
+        { status: 404 }
+      );
+    }
+
+    // Delete the ticket from the lender's ticket list
+    await User.findByIdAndUpdate(
+      deletedTicket?.lender,
+      {
+        $pull: { loanTickets: deletedTicket?._id },
+      },
+      { new: true }
+    );
+
+    return NextResponse.json(
+      { message: "Loan ticket deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
