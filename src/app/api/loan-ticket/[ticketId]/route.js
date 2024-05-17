@@ -1,5 +1,6 @@
 import dbConnect from "@/db/mongodb";
 import LoanTicket from "@/models/loanTicket.model";
+import PaymentMode from "@/models/paymentMode.model";
 import User from "@/models/user.model";
 import { NextResponse } from "next/server";
 
