@@ -219,7 +219,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
           <Textarea
             onChange={(e) => setLoanReason(e.target.value)}
             value={loanReason}
-            placeholder="Enter loan reason (optional)"
+            placeholder="(optional)"
             id="loanReason"
             autoComplete="off"
             name="loanReason"
@@ -234,7 +234,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             }
             value={paybackAmount}
             type="number"
-            placeholder="Enter payment amount (optional)"
+            placeholder="Enter return amount (optional)"
             id="paymentAmount"
             autoComplete="off"
             name="paymentAmount"

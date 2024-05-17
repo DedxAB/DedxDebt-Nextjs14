@@ -43,15 +43,15 @@ const UpdateStatusForm = ({ ticket }) => {
   const handleUpdatePayback = async (e) => {
     e.preventDefault();
 
-    if (newPaybackAmount < 1) {
-      toast.error("Payback amount should be atleast Rs. 1");
+    if (!newPaybackAmount || newPaybackAmount < 1) {
+      toast.error("Return amount should be atleast Rs. 1");
       return;
     }
 
     // Update the payback status
-    const toastId = toast.loading("Updating Payback Status...");
+    const toastId = toast.loading("Updating return status...");
     try {
-      const res = await fetch(`/api/loan-ticket/${ticket._id}/update-payback`, {
+      const res = await fetch(`/api/loan-ticket/${ticket?._id}/update-payback`, {
         method: "PATCH",
         headers: {
           "content-type": "application/json",
@@ -66,12 +66,12 @@ const UpdateStatusForm = ({ ticket }) => {
         const { error } = await res.json();
         throw new Error(error);
       }
-      toast.success("Payback status updated successfully", {
+      toast.success("Return status updated successfully", {
         id: toastId,
       });
-      router.push(`/ticket/${ticket._id}/details`);
+      router.push(`/ticket/${ticket?._id}/details`);
     } catch (error) {
-      toast.error("Failed to update payback status", {
+      toast.error(error, {
         id: toastId,
       });
     } finally {
@@ -130,7 +130,11 @@ const UpdateStatusForm = ({ ticket }) => {
             value={newPaybackAmount}
             type="number"
             onChange={(e) =>
-              setNewPaybackAmount(e.target.value && parseInt(e.target.value))
+              setNewPaybackAmount(
+                e.target.value > leftAmount
+                  ? leftAmount
+                  : parseInt(e.target.value)
+              )
             }
             className="font-semibold"
           />
@@ -177,13 +181,13 @@ const UpdateStatusForm = ({ ticket }) => {
               <SelectGroup>
                 <SelectLabel>Status</SelectLabel>
                 <SelectItem value="pending" className={`cursor-pointer`}>
-                  👨‍🎤&nbsp;Pending
+                  👨‍🎤&nbsp; Pending
                 </SelectItem>
                 <SelectItem value="partiallyPaid" className={`cursor-pointer`}>
-                  💳&nbsp;Partially Paid
+                  💳&nbsp; Partially Paid
                 </SelectItem>
                 <SelectItem value="paid" className={`cursor-pointer`}>
-                  💰&nbsp;Fully Paid
+                  💰&nbsp; Fully Paid
                 </SelectItem>
               </SelectGroup>
             </SelectContent>

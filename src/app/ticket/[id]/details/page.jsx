@@ -1,3 +1,4 @@
+import DeleteTicket from "@/components/DeleteTicket";
 import TicketCard from "@/components/TicketCard";
 import { Button } from "@/components/ui/button";
 import { fetchTicketById } from "@/services/ticketServices";
@@ -17,7 +18,7 @@ export default async function TicketDetails({ params }) {
 
   // check if the user is the owner of the ticket, if not redirect to the home page
   if (user?.emailAddresses[0].emailAddress !== ticket?.lender?.email) {
-    redirect("/");
+    redirect("/dashboard");
   }
 
   const paymentsBackArray = ticket?.paymentsBack;
@@ -33,16 +34,18 @@ export default async function TicketDetails({ params }) {
 
   return (
     <>
-      <div>
+      <>
         <TicketCard ticket={ticket} />
-      </div>
+      </>
 
       {/* Updating the ticket details */}
       <div className="flex gap-3 my-3 justify-end">
         <Link href={`${baseUrl}/update-ticket/${ticket?._id}`}>
           <Button>Update</Button>
         </Link>
-        <Button>Delete</Button>
+        <>
+          <DeleteTicket ticket={ticket} />
+        </>
       </div>
 
       {/* All payback details will be shown here */}
