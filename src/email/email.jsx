@@ -18,12 +18,12 @@ const Email = ({ borrowerName, loanAmount, loanDate, lenderName }) => (
       <Container style={container}>
         <Section style={paragraphContent}>
           <Text style={heading}>DEBT UPDATE</Text>
-          <Text style={paragraph}>Hello {borrowerName},</Text>
+          <Text style={paragraph}>Hello, {borrowerName}</Text>
         </Section>
         <Section style={paragraphList}>
           <Text style={paragraph}>
             We&apos;re writing to let you know about your debt story. You
-            borrowed Rs. {loanAmount} on{" "}
+            borrowed <strong>₹{loanAmount}</strong> on{" "}
             {loanDate
               ? dayjs(loanDate).format("dddd MMM DD, YYYY")
               : dayjs(new Date()).format("dddd MMM DD, YYYY")}
@@ -31,7 +31,7 @@ const Email = ({ borrowerName, loanAmount, loanDate, lenderName }) => (
         </Section>
         <Section style={paragraphContent}>
           <Text style={paragraph}>
-            Your lender, {lenderName}, has provided the following payment
+            Your lender, {lenderName} has provided the following payment
             details:
           </Text>
           <ul>

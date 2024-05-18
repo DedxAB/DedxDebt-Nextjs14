@@ -15,7 +15,11 @@ export default function TicketCard({ ticket }) {
       {ticket?.lender?.email && <p>Lender email: {ticket?.lender?.email}</p>}
       {ticket?.borrowerName && <h2>Borrower: {ticket?.borrowerName}</h2>}
       {ticket?.borrowerAddress && <p>Address: {ticket?.borrowerAddress}</p>}
-      {ticket?.loanAmount && <p>Borrowed Amount: Rs. {ticket?.loanAmount}</p>}
+      {ticket?.loanAmount && (
+        <p>
+          Borrowed Amount: <strong>₹{ticket?.loanAmount}</strong>
+        </p>
+      )}
       {ticket?.loanReason && <p>Reason: {ticket?.loanReason}</p>}
       {ticket?.borrowerContactDetails?.borrowerEmail && (
         <p>Email: {ticket?.borrowerContactDetails?.borrowerEmail}</p>

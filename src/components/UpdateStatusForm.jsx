@@ -44,11 +44,6 @@ const UpdateStatusForm = ({ ticket }) => {
   const handleUpdatePayback = async (e) => {
     e.preventDefault();
 
-    if (!newPaybackAmount || newPaybackAmount < 1) {
-      toast.error("Return amount should be atleast Rs. 1");
-      return;
-    }
-
     // Update the payback status
     const toastId = toast.loading("Updating return status...");
     try {
@@ -113,9 +108,9 @@ const UpdateStatusForm = ({ ticket }) => {
               setNewPaybackAmount(
                 e.target.value > leftAmount
                   ? leftAmount
-                  : parseInt(e.target.value)
+                  : e.target.value && parseInt(e.target.value)
               )
-            }
+            } // Limit the amount to be less than the left amount to be paid and should be a number only 
             className="font-semibold"
           />
         </div>

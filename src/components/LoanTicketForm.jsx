@@ -144,7 +144,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             onChange={(e) => setConfirmEmail(e.target.value)}
             value={confirmEmail}
             type="email"
-            placeholder="Enter borrower email"
+            placeholder="Enter same email to confirm"
             id="confirmEmail"
             autoComplete="off"
             name="confirmEmail"
