@@ -2,8 +2,10 @@ import dbConnect from "@/db/mongodb";
 import LoanTicket from "@/models/loanTicket.model";
 import PaymentMode from "@/models/paymentMode.model";
 import User from "@/models/user.model";
+import { validateUpdateTicket } from "@/validations/ticket.validation";
 import { NextResponse } from "next/server";
 
+// Get the ticket
 export async function GET(_req, { params }) {
   const { ticketId } = params;
   try {
@@ -27,6 +29,7 @@ export async function GET(_req, { params }) {
   }
 }
 
+// Delete the ticket
 export async function DELETE(_req, { params }) {
   const { ticketId } = params;
   try {
@@ -50,6 +53,60 @@ export async function DELETE(_req, { params }) {
 
     return NextResponse.json(
       { message: "Loan ticket deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+// Patch the ticket
+export async function PATCH(req, { params }) {
+  const { ticketId } = params;
+  const {
+    borrowerName,
+    borrowerEmail,
+    borrowerAddress,
+    borrowerPhoneNumber,
+    loanAmount,
+    loanDate,
+    loanReason,
+  } = await req.json();
+
+  const error = validateUpdateTicket({
+    borrowerName,
+    borrowerEmail,
+    borrowerAddress,
+    borrowerPhoneNumber,
+    loanAmount,
+    loanDate,
+    loanReason,
+  });
+
+  if (error) {
+    return NextResponse.json({ error }, { status: 400 });
+  }
+
+  try {
+    await dbConnect();
+    const updatedTicket = await LoanTicket.findByIdAndUpdate(
+      ticketId,
+      {
+        borrowerName,
+        borrowerAddress,
+        borrowerContactDetails: {
+          borrowerEmail,
+          borrowerPhoneNumber,
+        },
+        loanAmount,
+        loanReason,
+        loanDate,
+      },
+      { new: true }
+    );
+
+    return NextResponse.json(
+      { message: "Ticket updated successfully", data: updatedTicket },
       { status: 200 }
     );
   } catch (error) {

@@ -22,13 +22,19 @@ export async function POST(req) {
   } = await req.json();
 
   // Validate the input data
-  const error = validateLoanTicket(
-    borrowerName,
-    borrowerEmail,
-    loanAmount,
+  const error = validateLoanTicket({
     lender,
-    paybackAmount
-  );
+    borrowerName,
+    borrowerAddress,
+    borrowerEmail,
+    borrowerPhoneNumber,
+    loanAmount,
+    loanDate,
+    loanReason,
+    paybackStatus,
+    paybackAmount,
+    paybackDate,
+  });
   if (error) {
     return NextResponse.json({ error }, { status: 400 });
   }

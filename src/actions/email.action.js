@@ -38,7 +38,7 @@ export const sendEmail = async ({
 
     const options = {
       from: {
-        name: "DedxDebt",
+        name: "DedxDebt - Debt Manager",
         address: process.env.USER_EMAIL,
       },
       to: borrowerEmail,

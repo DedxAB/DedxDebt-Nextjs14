@@ -1,14 +1,24 @@
 import dbConnect from "@/db/mongodb";
 import LoanTicket from "@/models/loanTicket.model";
+import { validateReturnStatus } from "@/validations/ticket.validation";
 import { NextResponse } from "next/server";
 
 export const PATCH = async (req, { params }) => {
-  await dbConnect();
   const { ticketId } = params;
   const { paybackStatus, paybackAmount, paybackDate } = await req.json();
 
+  const error = validateReturnStatus({
+    paybackStatus,
+    paybackAmount,
+    paybackDate,
+  });
+  if (error) {
+    return NextResponse.json({ error }, { status: 400 });
+  }
+
   try {
     // Update the payback status
+    await dbConnect();
     const updatedTicket = await LoanTicket.findByIdAndUpdate(
       ticketId,
       {
