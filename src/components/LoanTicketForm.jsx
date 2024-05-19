@@ -80,15 +80,14 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
 
       const toastId2 = toast.loading("Sending email to borrower..");
       // send email to borrower
-      const text = "New Notice of Your Debt";
-      const lender = currentUserData?.name;
+      const lenderName = currentUserData?.name;
       await sendEmail({
+        lenderName,
         borrowerName,
         borrowerEmail,
-        text,
-        loanDate,
         loanAmount,
-        lender,
+        loanDate,
+        loanReason,
       });
 
       toast.success("Email sent to borrower", {

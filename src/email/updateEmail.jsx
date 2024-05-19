@@ -10,30 +10,32 @@ import {
 import dayjs from "dayjs";
 import * as React from "react";
 
-const Email = ({
+const UpdateEmail = ({
   lenderName,
   borrowerName,
   loanAmount,
-  loanDate,
   loanReason,
+  loanDate,
+  customEmailMessage,
 }) => (
   <Html>
     <Head />
-    <Preview>Your Debt story is waiting for you 🙂</Preview>
+    <Preview>
+      {customEmailMessage || "Checkout the updated debt details..."}
+    </Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={paragraphContent}>
           <Text style={heading}>DEBT UPDATE</Text>
           <Text style={paragraph}>Hello, {borrowerName}</Text>
+          <Text style={paragraph}>Here is the updated debt details.</Text>
         </Section>
+
         <Section style={paragraphList}>
           <Text style={paragraph}>
             We&apos;re writing to let you know about your debt story. You
             borrowed <strong>₹{loanAmount}</strong> on{" "}
-            {loanDate
-              ? dayjs(loanDate).format("dddd MMM DD, YYYY")
-              : dayjs(new Date()).format("dddd MMM DD, YYYY")}{" "}
-            for{" "}
+            {dayjs(loanDate).format("dddd MMM DD, YYYY")} for{" "}
             {loanReason ? `${loanReason.toLowerCase()}.` : "personal reasons."}
           </Text>
         </Section>
@@ -73,7 +75,7 @@ const Email = ({
   </Html>
 );
 
-export default Email;
+export default UpdateEmail;
 
 const main = {
   backgroundColor: "#dbddde",

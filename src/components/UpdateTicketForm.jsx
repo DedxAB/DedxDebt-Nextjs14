@@ -12,6 +12,8 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "./ui/calendar";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "./ui/checkbox";
+import { sendUpdatedTicketEmail } from "@/actions/email.action";
 
 export default function UpdateTicketForm({ ticket }) {
   const lenderName = ticket?.lender?.name;
@@ -37,6 +39,8 @@ export default function UpdateTicketForm({ ticket }) {
   const [newLoanAmount, setNewLoanAmount] = useState(loanAmount);
   const [newLoanDate, setNewLoanDate] = useState(loanDate);
   const [newLoanReason, setNewLoanReason] = useState(loanReason);
+  const [isChecked, setIsChecked] = useState(false);
+  const [customEmailMessage, setCustomEmailMessage] = useState("");
 
   // Function to handle the form submission
   const handleSubmitUpdateForm = async (e) => {
@@ -71,6 +75,22 @@ export default function UpdateTicketForm({ ticket }) {
         throw new Error(error);
       }
       toast.success("Ticket updated successfully", { id: toastId });
+
+      // Now send an email to the borrower if the checkbox is checked
+      if (isChecked) {
+        const toastId2 = toast.loading("Sending email to the borrower...");
+        await sendUpdatedTicketEmail({
+          lenderName,
+          borrowerName: newBorrowerName,
+          borrowerEmail: newBorrowerEmail,
+          loanAmount: newLoanAmount,
+          loanReason: newLoanReason,
+          loanDate: newLoanDate,
+          customEmailMessage,
+        });
+        toast.success("Email sent to the borrower", { id: toastId2 });
+      }
+
       router.push(`/ticket/${ticket?._id}/details`);
     } catch (error) {
       toast.error(error, { id: toastId });
@@ -191,6 +211,30 @@ export default function UpdateTicketForm({ ticket }) {
             </PopoverContent>
           </Popover>
         </div>
+      </div>
+      <div className="my-4">
+        <p className="my-3">
+          <span className="font-semibold text-primary">Note :</span> Every
+          updates will be notified to the borrower via email.
+        </p>
+
+        <div className="my-3 space-x-2 flex items-center">
+          <Checkbox
+            id="notifyBorrower"
+            checked={isChecked}
+            onCheckedChange={(checked) => setIsChecked(checked)}
+          />
+          <Label htmlFor="notifyBorrower" className="font-normal text-base">
+            Notify the borrower via email.
+          </Label>
+        </div>
+
+        <Textarea
+          placeholder="Add a message to the borrower which will be sent along with the mail (Optional)."
+          value={customEmailMessage}
+          onChange={(e) => setCustomEmailMessage(e.target.value)}
+          disabled={!isChecked}
+        />
       </div>
       <div className="flex items-center justify-end gap-3">
         <Button variant="outline" onClick={() => router.back()}>
