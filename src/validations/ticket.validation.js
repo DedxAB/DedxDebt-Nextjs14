@@ -140,7 +140,7 @@ export const validateUpdateTicket = ({
   }
 
   // Required fields for loan ticket
-  if (!loanAmount || loanAmount <= 0 || isNaN(loanAmount)) {
+  if (!loanAmount || loanAmount < 1 || isNaN(loanAmount)) {
     error = "Borrowed amount must be at least 1";
     return error;
   }
@@ -169,8 +169,8 @@ export const validateReturnStatus = ({
     error = "Please provide the payback status";
     return error;
   }
-  if (!paybackAmount || paybackAmount < 0 || isNaN(paybackAmount)) {
-    error = "Return amount must not less than 0";
+  if (!paybackAmount || paybackAmount < 1 || isNaN(paybackAmount)) {
+    error = "Return amount must not less than 1";
     return error;
   }
 
