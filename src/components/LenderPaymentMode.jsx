@@ -59,7 +59,7 @@ export default function LenderPaymentMode({ userInfo, paymentMode }) {
         throw new Error(error.error);
       }
       toast.success("Payment details added successfully", { id: toastId });
-      router.back();
+      router.push("/profile");
       router.refresh();
     } catch (error) {
       toast.error(error.message, { id: toastId });
@@ -152,9 +152,10 @@ export default function LenderPaymentMode({ userInfo, paymentMode }) {
       </div>
       <div className="my-5">
         <p>
-          <span className="font-semibold">Note:</span> Please make sure you
-          provide the correct details as it will be used for receiving payments.
-          Your payment details will be sent to the borrower mailing address.
+          <span className="font-semibold text-primary">Note :</span> Please make
+          sure you provide the correct details as it will be used for receiving
+          payments. Your payment details will be sent to the borrower mailing
+          address.
         </p>
       </div>
       <div className="flex items-center gap-3 justify-end">

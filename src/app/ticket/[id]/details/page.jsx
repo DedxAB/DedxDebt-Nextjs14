@@ -48,6 +48,14 @@ export default async function TicketDetails({ params }) {
         </>
       </div>
 
+      <div className="my-4 flex flex-col items-start justify-between gap-2">
+        <h1>Details send to a wrong person? </h1>
+        <Link href={`${baseUrl}/update-ticket/${ticket?._id}/appologize`}>
+          <Button>Appologize</Button>
+        </Link>
+      </div>
+
+      {/* Return Amount & Status along with date */}
       <div>
         <h1>Return Amount & Status along with date</h1>
       </div>
@@ -65,7 +73,7 @@ export default async function TicketDetails({ params }) {
             );
           })
         ) : (
-          <h1>No payback details found</h1>
+          <h1>No return details found</h1>
         )}
       </div>
 

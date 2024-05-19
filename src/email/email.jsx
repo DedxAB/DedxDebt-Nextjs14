@@ -107,7 +107,7 @@ const paragraphContent = {
 };
 
 const paragraphList = {
-  paddingLeft: 40,
+  padding: "0 20px 0 40px",
 };
 
 const paragraph = {
