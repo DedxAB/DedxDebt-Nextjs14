@@ -21,7 +21,8 @@ const UpdateEmail = ({
   <Html>
     <Head />
     <Preview>
-      {customEmailMessage || "Checkout the updated debt details..."}
+      {customEmailMessage.charAt(0).toUpperCase() +
+        customEmailMessage.slice(1) || "Checkout the updated debt details..."}
     </Preview>
     <Body style={main}>
       <Container style={container}>
