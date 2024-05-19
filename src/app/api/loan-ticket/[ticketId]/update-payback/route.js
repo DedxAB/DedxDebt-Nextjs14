@@ -23,9 +23,9 @@ export const PATCH = async (req, { params }) => {
       ticketId,
       {
         paybackStatus,
-        $push: {
-          paymentsBack: { paybackAmount, paybackDate },
-        },
+        ...(paybackAmount && {
+          $push: { paymentsBack: { paybackAmount, paybackDate } },
+        }),
       },
       { new: true }
     );

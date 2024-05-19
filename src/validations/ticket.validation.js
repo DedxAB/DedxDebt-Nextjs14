@@ -169,8 +169,10 @@ export const validateReturnStatus = ({
     error = "Please provide the payback status";
     return error;
   }
-  if (!paybackAmount || paybackAmount < 1 || isNaN(paybackAmount)) {
-    error = "Return amount must not less than 1";
+
+  // Optional fields for loan ticket
+  if (paybackAmount && (paybackAmount < 0 || isNaN(paybackAmount))) {
+    error = "Return amount must not less than 0";
     return error;
   }
 
