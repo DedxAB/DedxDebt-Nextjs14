@@ -15,7 +15,7 @@ export default function ReturnAmountCard({ p, index, paybackStatus }) {
                 : "bg-green-200"
             } text-black font-semibold px-3 py-1 rounded-md text-center`}
           >
-            Rs. {p.paybackAmount}
+            ₹{p.paybackAmount}
           </p>
         </div>
         <div className="flex flex-col gap-2">

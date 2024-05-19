@@ -90,13 +90,13 @@ export default async function TicketDetails({ params }) {
         <div className="flex gap-1 flex-col">
           <h1>Total Paid Amount</h1>
           <p className="bg-green-200 text-black font-semibold py-2 px-4 text-center rounded-md">
-            Rs. {totalPaybackAmount}
+            ₹{totalPaybackAmount}
           </p>
         </div>
         <div className="flex flex-col gap-1">
           <h1>Left Amount to be paid</h1>
           <p className="bg-red-200 text-black font-semibold text-center py-2 px-4 rounded-md">
-            Rs. {leftAmount}
+            ₹{leftAmount}
           </p>
         </div>
       </div>
@@ -107,7 +107,7 @@ export default async function TicketDetails({ params }) {
         <div>
           <Link href={`${baseUrl}/update-ticket/${ticket?._id}/payment-status`}>
             <Button>Update Status</Button>
-          </Link>
+          </Link> 
         </div>
       </div>
     </>
