@@ -50,8 +50,8 @@ export default async function TicketDetails({ params }) {
 
       <div className="my-4 flex flex-col items-start justify-between gap-2">
         <h1>Details send to a wrong person? </h1>
-        <Link href={`${baseUrl}/update-ticket/${ticket?._id}/appologize`}>
-          <Button>Appologize</Button>
+        <Link href={`${baseUrl}/update-ticket/${ticket?._id}/apologize`}>
+          <Button>Apologize</Button>
         </Link>
       </div>
 

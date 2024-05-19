@@ -6,9 +6,11 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { toast } from "sonner";
 import { sendApologyMail } from "@/actions/email.action";
+import { useRouter } from "next/navigation";
 
 export default function ApologyForm({ ticket }) {
   const [apologyMessage, setApologyMessage] = useState("");
+  const router = useRouter();
 
   const borrowerName = ticket?.borrowerName;
   const borrowerEmail = ticket?.borrowerContactDetails?.borrowerEmail;
@@ -24,8 +26,11 @@ export default function ApologyForm({ ticket }) {
         apologyMessage,
       });
       toast.success("Mail sent successfully", { id: toastId });
+      router.push(`/ticket/${ticket?._id}/details`);
     } catch (error) {
       toast.error("Error sending mail", { id: toastId });
+    } finally {
+      router.refresh();
     }
   };
 
@@ -64,7 +69,10 @@ export default function ApologyForm({ ticket }) {
           to update the borrower mail after this action.
         </h1>
       </>
-      <div className="flex items-center justify-end my-3">
+      <div className="flex items-center justify-end my-3 gap-3">
+        <Button variant="outline" onClick={() => router.back()}>
+          Cancel
+        </Button>
         <Button onClick={handleSubmitForm}>Send Mail</Button>
       </div>
     </>

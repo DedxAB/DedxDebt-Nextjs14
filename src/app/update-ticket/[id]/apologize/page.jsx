@@ -16,7 +16,7 @@ export default async function page({ params }) {
   }
   return (
     <>
-      <div>Appologize</div>
+      <div>Apologize</div>
       <>
         <ApologyForm ticket={ticket} />
       </>
