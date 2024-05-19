@@ -5,7 +5,7 @@ export default function ReturnAmountCard({ p, index, paybackStatus }) {
     <>
       <div className="flex flex-wrap items-center gap-2">
         <div className="flex flex-col gap-2">
-          <h1>Return Amount {index + 1}</h1>
+          <h1>Amount {index + 1}</h1>
           <p
             className={`${
               paybackStatus === "pending"
@@ -19,7 +19,7 @@ export default function ReturnAmountCard({ p, index, paybackStatus }) {
           </p>
         </div>
         <div className="flex flex-col gap-2">
-          <h1>Return Date {index + 1}</h1>
+          <h1>Date {index + 1}</h1>
           <p
             className={`${
               paybackStatus === "pending"

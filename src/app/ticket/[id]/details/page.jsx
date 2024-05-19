@@ -48,6 +48,9 @@ export default async function TicketDetails({ params }) {
         </>
       </div>
 
+      <div>
+        <h1>Return Amount & Status along with date</h1>
+      </div>
       {/* All payback details will be shown here */}
       <div className="my-3 flex flex-wrap gap-3 border px-5 py-3 rounded-md">
         {paymentsBackArray?.length > 0 ? (
@@ -69,7 +72,7 @@ export default async function TicketDetails({ params }) {
       {/* Return Amount Status */}
       <div className="flex flex-wrap gap-3 border py-3 px-5 rounded-md">
         <div className="flex flex-col gap-1">
-          <h1>Return Amount Status</h1>
+          <h1>Status</h1>
           <p
             className={`${
               ticket?.paybackStatus === "pending"
@@ -77,7 +80,7 @@ export default async function TicketDetails({ params }) {
                 : ticket?.paybackStatus === "partiallyPaid"
                 ? "bg-yellow-200"
                 : "bg-green-200"
-            } text-black font-semibold py-2 px-4 text-center rounded-md`}
+            } text-black font-semibold py-1 px-3 text-center rounded-md`}
           >
             {ticket?.paybackStatus === "pending"
               ? "Pending"
@@ -88,14 +91,14 @@ export default async function TicketDetails({ params }) {
         </div>
 
         <div className="flex gap-1 flex-col">
-          <h1>Total Paid Amount</h1>
-          <p className="bg-green-200 text-black font-semibold py-2 px-4 text-center rounded-md">
+          <h1>Total Paid</h1>
+          <p className="bg-green-200 text-black font-semibold py-1 px-3 text-center rounded-md">
             ₹{totalPaybackAmount}
           </p>
         </div>
         <div className="flex flex-col gap-1">
-          <h1>Left Amount to be paid</h1>
-          <p className="bg-red-200 text-black font-semibold text-center py-2 px-4 rounded-md">
+          <h1>Left Amount</h1>
+          <p className="bg-red-200 text-black font-semibold text-center py-1 px-3 rounded-md">
             ₹{leftAmount}
           </p>
         </div>
@@ -106,8 +109,8 @@ export default async function TicketDetails({ params }) {
         <h1>Want to update status? </h1>
         <div>
           <Link href={`${baseUrl}/update-ticket/${ticket?._id}/payment-status`}>
-            <Button>Update Status</Button>
-          </Link> 
+            <Button>Update</Button>
+          </Link>
         </div>
       </div>
     </>

@@ -92,8 +92,8 @@ export default function UpdateTicketForm({ ticket }) {
         </div>
         <div>
           <p>
-            <span className="font-semibold">Note:</span> If you want to update
-            your name then visit the profile section.
+            <span className="font-semibold text-primary">Note :</span> If you
+            want to update your name then visit the profile section.
           </p>
         </div>
         <div className="flex flex-col gap-3">
@@ -142,7 +142,7 @@ export default function UpdateTicketForm({ ticket }) {
           />
         </div>
         <div className="flex flex-col gap-3">
-          <Label htmlFor="loanAmount">Borrowed Amount</Label>
+          <Label htmlFor="loanAmount">₹Amount</Label>
           <Input
             id="loanAmount"
             value={newLoanAmount}
@@ -158,12 +158,12 @@ export default function UpdateTicketForm({ ticket }) {
           <Textarea
             id="loanReason"
             value={newLoanReason}
-            placeholder="Loan reason (Optional)"
+            placeholder="Reason (Optional)"
             onChange={(e) => setNewLoanReason(e.target.value)}
           />
         </div>
         <div className="flex flex-col gap-3">
-          <Label>Loan Date</Label>
+          <Label>Borrowed Date</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -192,7 +192,10 @@ export default function UpdateTicketForm({ ticket }) {
           </Popover>
         </div>
       </div>
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-end gap-3">
+        <Button variant="outline" onClick={() => router.back()}>
+          Cancel
+        </Button>
         <Button onClick={handleSubmitUpdateForm}>Update Ticket</Button>
       </div>
     </>

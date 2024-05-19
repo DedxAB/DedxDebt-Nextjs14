@@ -107,7 +107,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
     <div className="my-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="flex flex-col gap-3">
-          <Label htmlFor="lender">Your Email 🌟</Label>
+          <Label htmlFor="lender">Your Email</Label>
           <Input
             type="text"
             id="lender"
@@ -117,7 +117,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
           />
         </div>
         <div className="flex flex-col gap-3">
-          <Label htmlFor="borrowerName">Borrower Name 🌟</Label>
+          <Label htmlFor="borrowerName">Borrower Name</Label>
           <Input
             onChange={(e) => setBorrowerName(e.target.value)}
             value={borrowerName}
@@ -128,7 +128,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
           />
         </div>
         <div className="flex flex-col gap-3">
-          <Label htmlFor="email">Borrower Email 🌟</Label>
+          <Label htmlFor="email">Borrower Email</Label>
           <Input
             onChange={(e) => setBorrowerEmail(e.target.value)}
             value={borrowerEmail}
@@ -139,7 +139,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
           />
         </div>
         <div className="flex flex-col gap-3">
-          <Label htmlFor="confirmEmail">Confirm Email 🌟</Label>
+          <Label htmlFor="confirmEmail">Confirm Email</Label>
           <Input
             onChange={(e) => setConfirmEmail(e.target.value)}
             value={confirmEmail}
@@ -156,7 +156,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             onChange={(e) => setBorrowerPhoneNumber(e.target.value)}
             value={borrowerPhoneNumber}
             type="text"
-            placeholder="Enter borrower phone number (optional)"
+            placeholder="Phone No. (optional)"
             id="phoneNumber"
             name="borrowerPhoneNumber"
           />
@@ -166,13 +166,13 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
           <Textarea
             onChange={(e) => setBorrowerAddress(e.target.value)}
             value={borrowerAddress}
-            placeholder="Enter borrower address (optional)"
+            placeholder="Address (optional)"
             id="address"
             name="borrowerAddress"
           />
         </div>
         <div className="flex flex-col gap-3">
-          <Label htmlFor="loanAmount">Borrowed Amount 🌟</Label>
+          <Label htmlFor="loanAmount">₹Amount</Label>
           <Input
             onChange={(e) =>
               setLoanAmount(e.target.value && parseInt(e.target.value))
@@ -186,7 +186,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
           />
         </div>
         <div className="flex flex-col gap-3">
-          <Label>Borrowed Date 🌟</Label>
+          <Label>Borrowed Date</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -240,31 +240,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             name="paymentAmount"
           />
         </div>
-        <div className="flex flex-col gap-3">
-          <Label>Return Amount Status 🌟</Label>
-          <Select
-            onValueChange={(newValue) => setPaybackStatus(newValue)}
-            // defaultValue={paybackStatus}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Amount Back Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Amount Return Status</SelectLabel>
-                <SelectItem value="pending" className={`cursor-pointer`}>
-                  👨‍🎤&nbsp;Pending
-                </SelectItem>
-                <SelectItem value="partiallyPaid" className={`cursor-pointer`}>
-                  💳&nbsp;Partially Paid
-                </SelectItem>
-                <SelectItem value="paid" className={`cursor-pointer`}>
-                  💰&nbsp;Paid
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
+
         <div className="flex flex-col gap-3">
           <Label>Return Amount Date</Label>
           <Popover>
@@ -278,7 +254,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {paybackDate ? (
-                  dayjs(paybackDate).format("MMM DD, YYYY") 
+                  dayjs(paybackDate).format("MMM DD, YYYY")
                 ) : (
                   <span>Pick a date</span>
                 )}
@@ -294,11 +270,35 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
             </PopoverContent>
           </Popover>
         </div>
+        <div className="flex flex-col gap-3">
+          <Label>Return Amount Status</Label>
+          <Select
+            onValueChange={(newValue) => setPaybackStatus(newValue)}
+            // defaultValue={paybackStatus}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Amount Back Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Amount Return Status</SelectLabel>
+                <SelectItem value="pending" className={`cursor-pointer`}>
+                  Pending
+                </SelectItem>
+                <SelectItem value="partiallyPaid" className={`cursor-pointer`}>
+                  Partially Paid
+                </SelectItem>
+                <SelectItem value="paid" className={`cursor-pointer`}>
+                  Fully Paid
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
-      <div className="flex flex-col gap-2 my-2">
+      <div className="flex flex-col gap-2 my-4">
         <p className="text-gray-500 text-sm">
-          You can add more payback details later (payback amount, payback date &
-          payback status).
+          You can add more return details later.
         </p>
       </div>
 
@@ -307,15 +307,15 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
           Before you create a loan ticket, make sure you have the
           borrower&apos;s consent to share their contact details with us.
         </p>
-        <p>
-          <span className="font-semibold">Note : </span>
+        <p className="my-3">
+          <span className="font-semibold text-primary">Note : </span>
           Please verify the borrower&apos;s email address cause we will send an
-          email to the borrower with the loan details.
+          email to the borrower with the debt details.
         </p>
       </div>
-      <div className="mt-5 mb-28">
-        <Button onClick={PostLoanTicket} className="bg-primary font-bold">
-          Submit
+      <div className="flex items-center justify-end mt-5 mb-28">
+        <Button onClick={PostLoanTicket} className="bg-primary font-semibold">
+          Publish
         </Button>
       </div>
     </div>

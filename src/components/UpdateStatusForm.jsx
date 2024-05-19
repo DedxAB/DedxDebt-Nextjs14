@@ -35,7 +35,7 @@ const UpdateStatusForm = ({ ticket }) => {
   // Calculate the left amount to be paid
   const leftAmount = ticket?.loanAmount - totalPaybackAmount;
 
-  const [newPaybackAmount, setNewPaybackAmount] = useState(1);
+  const [newPaybackAmount, setNewPaybackAmount] = useState(0);
   const [newPaybackDate, setNewPaybackDate] = useState(new Date());
   const [newPaybackStatus, setNewPaybackStatus] = useState(paybackStatus);
 
@@ -93,12 +93,37 @@ const UpdateStatusForm = ({ ticket }) => {
             );
           })}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 my-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-5 my-5">
+        <div className="flex flex-col gap-3">
+          <Label>Return Status</Label>
+          <Select
+            onValueChange={(newValue) => setNewPaybackStatus(newValue)}
+            defaultValue={newPaybackStatus}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Amount Back Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Status</SelectLabel>
+                <SelectItem value="pending" className={`cursor-pointer`}>
+                  Pending
+                </SelectItem>
+                <SelectItem value="partiallyPaid" className={`cursor-pointer`}>
+                  Partially Paid
+                </SelectItem>
+                <SelectItem value="paid" className={`cursor-pointer`}>
+                  Fully Paid
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
         <div className="flex flex-col gap-3">
           <Label htmlFor="paybackAmount">
-            Return Amount (
-            <span className="text-primary font-semibold">Rs. {leftAmount}</span>{" "}
-            left to be paid)
+            Amount (
+            <span className="text-primary font-semibold">₹{leftAmount}</span>{" "}
+            left)
           </Label>
           <Input
             id="paybackAmount"
@@ -110,12 +135,12 @@ const UpdateStatusForm = ({ ticket }) => {
                   ? leftAmount
                   : e.target.value && parseInt(e.target.value)
               )
-            } // Limit the amount to be less than the left amount to be paid and should be a number only 
+            } // Limit the amount to be less than the left amount to be paid and should be a number only
             className="font-semibold"
           />
         </div>
         <div className="flex flex-col gap-3">
-          <Label>Return Amount Date 🌟</Label>
+          <Label>Return Amount Date</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -127,7 +152,7 @@ const UpdateStatusForm = ({ ticket }) => {
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {newPaybackDate ? (
-                  dayjs(newPaybackDate).format("dddd MMM D, YYYY")
+                  dayjs(newPaybackDate).format("MMM D, YYYY")
                 ) : (
                   <span>Pick a date</span>
                 )}
@@ -142,31 +167,6 @@ const UpdateStatusForm = ({ ticket }) => {
               />
             </PopoverContent>
           </Popover>
-        </div>
-        <div className="flex flex-col gap-3">
-          <Label>Amount Return Status 🌟</Label>
-          <Select
-            onValueChange={(newValue) => setNewPaybackStatus(newValue)}
-            defaultValue={newPaybackStatus}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Amount Back Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Status</SelectLabel>
-                <SelectItem value="pending" className={`cursor-pointer`}>
-                  👨‍🎤&nbsp; Pending
-                </SelectItem>
-                <SelectItem value="partiallyPaid" className={`cursor-pointer`}>
-                  💳&nbsp; Partially Paid
-                </SelectItem>
-                <SelectItem value="paid" className={`cursor-pointer`}>
-                  💰&nbsp; Fully Paid
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
         </div>
       </div>
       <div className="my-3 flex justify-end gap-3">
