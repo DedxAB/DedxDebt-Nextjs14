@@ -73,7 +73,9 @@ export default async function TicketDetails({ params }) {
             );
           })
         ) : (
-          <h1>No return details found</h1>
+          <div className="text-muted-foreground">
+            No return amount added yet
+          </div>
         )}
       </div>
 

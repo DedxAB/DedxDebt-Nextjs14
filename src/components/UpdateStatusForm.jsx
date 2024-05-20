@@ -81,7 +81,7 @@ const UpdateStatusForm = ({ ticket }) => {
   return (
     <>
       <div className="my-3 flex flex-wrap gap-3 border px-5 py-3 rounded-md">
-        {paybackAmountArray.length > 0 &&
+        {paybackAmountArray.length > 0 ? (
           paybackAmountArray.map((p, index) => {
             return (
               <ReturnAmountCard
@@ -91,7 +91,12 @@ const UpdateStatusForm = ({ ticket }) => {
                 paybackStatus={paybackStatus}
               />
             );
-          })}
+          })
+        ) : (
+          <div className="text-muted-foreground">
+            No return amount added yet
+          </div>
+        )}
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-5 my-5">
         <div className="flex flex-col gap-3">
