@@ -8,11 +8,14 @@ import ApologyEmail from "@/email/apologyEmail";
 
 export const sendEmail = async ({
   lenderName,
+  lenderEmail,
+  lenderPhoneNumber,
   borrowerName,
   borrowerEmail,
   loanAmount,
   loanDate,
   loanReason,
+  paymentMethod,
 }) => {
   const customEmailSubject = "New Debt Notification 🚨";
 
@@ -30,10 +33,13 @@ export const sendEmail = async ({
     const emailHtml = render(
       <Email
         lenderName={lenderName}
+        lenderEmail={lenderEmail}
+        lenderPhoneNumber={lenderPhoneNumber}
         borrowerName={borrowerName}
         loanAmount={loanAmount}
         loanDate={loanDate}
         loanReason={loanReason}
+        paymentMethod={paymentMethod}
       />,
       {
         pretty: true,
