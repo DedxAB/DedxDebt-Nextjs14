@@ -10,5 +10,5 @@ export default async function Home() {
     <div className="flex items-center gap-5">
       <h1>Hello, world!</h1>
     </div>
-  ); 
+  );
 }

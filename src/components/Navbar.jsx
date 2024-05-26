@@ -11,9 +11,10 @@ export default async function Navbar() {
   return (
     <div className="max-w-3xl mx-auto p-4">
       <div className="flex items-center justify-between w-full">
-        <Link href={`/`}>
+        <Link href={`${user ? `/dashboard` : `/`}`}>
           Ded<span className="text-primary">x</span>Debt
         </Link>
+
         <div className="flex items-center justify-between gap-5">
           <ToggleTheme />
           <SignedOut>
