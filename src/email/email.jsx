@@ -24,7 +24,7 @@ const Email = ({
   loanDate,
   loanReason,
   paymentMethod,
-  ticketId
+  ticketId,
 }) => (
   <Html>
     <Head />
@@ -102,9 +102,7 @@ const Email = ({
         </Section>
         <Section style={paragraphContent}>
           <Text style={paragraph}>Thank you,</Text>
-          <Text style={{ ...paragraph, fontSize: "16px" }}>
-            The DedxDebt Team
-          </Text>
+          <Text style={{ ...paragraph, fontSize: "16px" }}>DedxDebt Team</Text>
         </Section>
       </Container>
     </Body>

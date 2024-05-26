@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { Checkbox } from "./ui/checkbox";
 import { sendUpdatedTicketEmail } from "@/actions/email.action";
 
-export default function UpdateTicketForm({ ticket }) {
+export default function UpdateTicketForm({ ticket, currentUserData }) {
   const lenderName = ticket?.lender?.name;
   const lenderEmail = ticket?.lender?.email;
   const borrowerName = ticket?.borrowerName;
@@ -41,13 +41,46 @@ export default function UpdateTicketForm({ ticket }) {
   const [newLoanReason, setNewLoanReason] = useState(loanReason);
   const [isChecked, setIsChecked] = useState(false);
   const [customEmailMessage, setCustomEmailMessage] = useState("");
+  const [isUpiIdChecked, setIsUpiIdChecked] = useState(false);
+  const [isUpiNumberChecked, setIsUpiNumberChecked] = useState(false);
+  const [isBankAccountChecked, setIsBankAccountChecked] = useState(false);
+  const [isContactNumberChecked, setIsContactNumberChecked] = useState(false);
+
+  // Payment mode
+  const paymentMode = currentUserData?.paymentModes?.paymentMethod;
+
+  const upiId = paymentMode?.upiId;
+  const upiNumber = paymentMode?.upiNumber;
+  const bankAccount = paymentMode?.bankAccount;
+
+  // lender contact number
+  const contactNumber = currentUserData?.phoneNumber;
+
+  // Create payment method object to add the selected payment mode and send it to the borrower email
+  const paymentMethod = {};
+  if (isUpiIdChecked) {
+    paymentMethod.upiId = upiId;
+  }
+  if (isUpiNumberChecked) {
+    paymentMethod.upiNumber = upiNumber;
+  }
+  if (isBankAccountChecked) {
+    paymentMethod.bankAccount = bankAccount;
+  }
 
   // Function to handle the form submission
   const handleSubmitUpdateForm = async (e) => {
     e.preventDefault();
 
+    // Check if the borrower email is valid
     if (newBorrowerEmail !== confirmBorrowerEmail) {
       return toast.error("Emails do not match");
+    }
+
+    // Check if any payment mode is selected
+    if (!isUpiIdChecked && !isUpiNumberChecked && !isBankAccountChecked) {
+      toast.error("Please select a payment mode");
+      return;
     }
 
     const toastId = toast.loading("Updating ticket...");
@@ -76,17 +109,25 @@ export default function UpdateTicketForm({ ticket }) {
       }
       toast.success("Ticket updated successfully", { id: toastId });
 
+      const lenderPhoneNumber = isContactNumberChecked
+        ? currentUserData?.phoneNumber
+        : "";
+
       // Now send an email to the borrower if the checkbox is checked
       if (isChecked) {
         const toastId2 = toast.loading("Sending email to the borrower...");
         await sendUpdatedTicketEmail({
           lenderName,
+          lenderEmail,
+          lenderPhoneNumber,
           borrowerName: newBorrowerName,
           borrowerEmail: newBorrowerEmail,
           loanAmount: newLoanAmount,
           loanReason: newLoanReason,
           loanDate: newLoanDate,
           customEmailMessage,
+          paymentMethod,
+          ticketId: ticket?._id,
         });
         toast.success("Email sent to the borrower", { id: toastId2 });
       }
@@ -213,6 +254,103 @@ export default function UpdateTicketForm({ ticket }) {
         </div>
       </div>
       <div className="my-4">
+        <h2 className="text-primary font-semibold">Payment Mode:</h2>
+        {paymentMode ? (
+          <p>Select the payment mode you want to share with the borrower</p>
+        ) : (
+          <p>
+            You have not added any payment mode yet. Please add a payment mode
+            in profile to proceed.
+          </p>
+        )}
+        {paymentMode && (
+          <div className="border rounded-md px-4 py-2 my-3">
+            {upiId && (
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="upiId"
+                  checked={isUpiIdChecked}
+                  onCheckedChange={(checked) => setIsUpiIdChecked(checked)}
+                />
+                <Label htmlFor="upiId" className="font-normal text-base">
+                  {upiId} <span className="text-primary">(UPI id)</span>
+                </Label>
+              </div>
+            )}
+            {upiNumber && (
+              <>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="upiNumber"
+                    checked={isUpiNumberChecked}
+                    onCheckedChange={(checked) =>
+                      setIsUpiNumberChecked(checked)
+                    }
+                  />
+                  <Label htmlFor="upiNumber" className="font-normal text-base">
+                    {upiNumber}{" "}
+                    <span className="text-primary">(UPI number)</span>
+                  </Label>
+                </div>
+              </>
+            )}
+
+            {/* Account number is Main here  */}
+            {bankAccount?.accountNumber && (
+              <div className="flex items-start space-x-2 my-1">
+                <Checkbox
+                  id="accountNumber"
+                  checked={isBankAccountChecked}
+                  onCheckedChange={(checked) =>
+                    setIsBankAccountChecked(checked)
+                  }
+                />
+                <div className="border rounded-md px-4 py-1">
+                  {bankAccount?.bankName && (
+                    <div>Bank Name: {bankAccount.bankName}</div>
+                  )}
+                  {bankAccount?.accountNumber && (
+                    <div>Account Number: {bankAccount.accountNumber}</div>
+                  )}
+                  {bankAccount?.ifsc && <div>IFSC: {bankAccount.ifsc}</div>}
+                  {bankAccount?.accountHolderName && (
+                    <div>
+                      Account Holder Name: {bankAccount.accountHolderName}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        <>
+          {contactNumber ? (
+            <>
+              <h2>Want to send your number as contact details?</h2>
+              <div className="flex items-center space-x-2 border rounded-md px-4 py-1 my-1">
+                <Checkbox
+                  id="sendNumber"
+                  checked={isContactNumberChecked}
+                  onCheckedChange={(checked) =>
+                    setIsContactNumberChecked(checked)
+                  }
+                />
+                <Label htmlFor="sendNumber" className="font-normal text-base">
+                  {contactNumber}
+                </Label>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="font-semibold">
+                Want to send your number as contact details?
+              </h2>
+              <p>You can add a contact number in profile.</p>
+            </>
+          )}
+        </>
+      </div>
+      <div className="my-4">
         <p className="my-3">
           <span className="font-semibold text-primary">Note :</span> Every
           updates will be notified to the borrower via email.
@@ -236,11 +374,14 @@ export default function UpdateTicketForm({ ticket }) {
           disabled={!isChecked}
         />
       </div>
+
       <div className="flex items-center justify-end gap-3">
         <Button variant="outline" onClick={() => router.back()}>
           Cancel
         </Button>
-        <Button onClick={handleSubmitUpdateForm}>Update Ticket</Button>
+        <Button onClick={handleSubmitUpdateForm} disabled={!paymentMode}>
+          Update Ticket
+        </Button>
       </div>
     </>
   );

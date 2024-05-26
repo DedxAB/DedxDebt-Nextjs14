@@ -1,22 +1,31 @@
 import {
   Body,
   Container,
+  Column,
   Head,
+  Hr,
   Html,
+  Img,
+  Link,
   Preview,
+  Row,
   Section,
   Text,
 } from "@react-email/components";
-import dayjs from "dayjs";
 import * as React from "react";
+import dayjs from "dayjs";
 
 const UpdateEmail = ({
   lenderName,
+  lenderEmail,
+  lenderPhoneNumber,
   borrowerName,
   loanAmount,
   loanReason,
   loanDate,
   customEmailMessage,
+  paymentMethod,
+  ticketId,
 }) => (
   <Html>
     <Head />
@@ -39,25 +48,54 @@ const UpdateEmail = ({
             {dayjs(loanDate).format("dddd MMM DD, YYYY")} for{" "}
             {loanReason ? `${loanReason.toLowerCase()}.` : "personal reasons."}
           </Text>
+          <Text style={paragraph}>
+            You can preview your debt story by clicking{" "}
+            <Link
+              href={`https://dedxdebt.vercel.app/preview/${ticketId}/details`}
+              style={link}
+            >
+              here
+            </Link>
+            .
+          </Text>
         </Section>
         <Section style={paragraphContent}>
           <Text style={paragraph}>
             Your lender, {lenderName} has provided the following payment
             details:
           </Text>
-          <ul>
-            <li style={paragraph}>UPI ID: arnab.5547@sbi</li>
-            <li style={paragraph}>UPI Number: 8597605547</li>
-          </ul>
+          {paymentMethod.upiId && (
+            <Text style={paragraph}>UPI ID: {paymentMethod.upiId}</Text>
+          )}
+          {paymentMethod.upiNumber && (
+            <Text style={paragraph}>UPI Number: {paymentMethod.upiNumber}</Text>
+          )}
+          {paymentMethod.bankAccount && (
+            <>
+              <Text style={paragraph}>
+                Bank Name: {paymentMethod.bankAccount.bankName}
+              </Text>
+              <Text style={paragraph}>
+                Account Number: {paymentMethod.bankAccount.accountNumber}
+              </Text>
+              <Text style={paragraph}>
+                IFSC Code: {paymentMethod.bankAccount.ifsc}
+              </Text>
+              <Text style={paragraph}>
+                Account Holder Name:{" "}
+                {paymentMethod.bankAccount.accountHolderName}
+              </Text>
+            </>
+          )}
         </Section>
         <Section style={paragraphContent}>
           <Text style={paragraph}>
             If you have any questions or concerns, please contact your lender.
           </Text>
-          <ul>
-            <li style={paragraph}> Email: arnab.officialcorp@gmail.com </li>
-            <li style={paragraph}> Phone: 8597605547 </li>
-          </ul>
+          {lenderEmail && <Text style={paragraph}> Email: {lenderEmail} </Text>}
+          {lenderPhoneNumber && (
+            <Text style={paragraph}> Phone: {lenderPhoneNumber} </Text>
+          )}
         </Section>
         <Section style={paragraphContent}>
           <Text style={paragraph}>
@@ -67,9 +105,7 @@ const UpdateEmail = ({
         </Section>
         <Section style={paragraphContent}>
           <Text style={paragraph}>Thank you,</Text>
-          <Text style={{ ...paragraph, fontSize: "16px" }}>
-            The DedxDebt Team
-          </Text>
+          <Text style={{ ...paragraph, fontSize: "16px" }}>DedxDebt Team</Text>
         </Section>
       </Container>
     </Body>

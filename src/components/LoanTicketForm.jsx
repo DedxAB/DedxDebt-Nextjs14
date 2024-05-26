@@ -456,11 +456,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
       </>
 
       <div className="flex items-center justify-end mt-5 mb-28">
-        <Button
-          onClick={postLoanTicket}
-          className="bg-primary font-semibold"
-          disabled={!paymentMode}
-        >
+        <Button onClick={postLoanTicket} disabled={!paymentMode}>
           Publish
         </Button>
       </div>
