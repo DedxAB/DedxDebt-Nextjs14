@@ -21,8 +21,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import ReturnAmountCard from "./ReturnAmountCard";
+import { Checkbox } from "./ui/checkbox";
+import { sendReturnAmountEmail } from "@/actions/email.action";
 
-const UpdateStatusForm = ({ ticket }) => {
+const UpdateStatusForm = ({ ticket, currentUserData }) => {
+  // console.log(ticket);
+  // console.log(currentUserData);
   const paybackStatus = ticket?.paybackStatus;
   const paybackAmountArray = ticket?.paymentsBack; // Array of Payback Amounts
 
@@ -38,8 +42,38 @@ const UpdateStatusForm = ({ ticket }) => {
   const [newPaybackAmount, setNewPaybackAmount] = useState(0);
   const [newPaybackDate, setNewPaybackDate] = useState(new Date());
   const [newPaybackStatus, setNewPaybackStatus] = useState(paybackStatus);
+  const [isUpiIdChecked, setIsUpiIdChecked] = useState(false);
+  const [isUpiNumberChecked, setIsUpiNumberChecked] = useState(false);
+  const [isBankAccountChecked, setIsBankAccountChecked] = useState(false);
+  const [isContactNumberChecked, setIsContactNumberChecked] = useState(false);
 
   const router = useRouter();
+
+  // Payment mode
+  const paymentMode = currentUserData?.paymentModes?.paymentMethod;
+
+  const upiId = paymentMode?.upiId;
+  const upiNumber = paymentMode?.upiNumber;
+  const bankAccount = paymentMode?.bankAccount;
+
+  // lender contact number
+  const contactNumber = currentUserData?.phoneNumber;
+
+  // Create payment method object to add the selected payment mode and send it to the borrower email
+  const paymentMethod = {};
+  if (isUpiIdChecked) {
+    paymentMethod.upiId = upiId;
+  }
+  if (isUpiNumberChecked) {
+    paymentMethod.upiNumber = upiNumber;
+  }
+  if (isBankAccountChecked) {
+    paymentMethod.bankAccount = bankAccount;
+  }
+
+  const lenderPhoneNumber = isContactNumberChecked
+    ? currentUserData?.phoneNumber
+    : "";
 
   const handleUpdatePayback = async (e) => {
     e.preventDefault();
@@ -68,6 +102,30 @@ const UpdateStatusForm = ({ ticket }) => {
       toast.success("Return status updated successfully", {
         id: toastId,
       });
+
+      // Send email to the borrower if the return amount is greater than 0
+      if (newPaybackAmount > 0) {
+        // Now send the reuturn amount notification to the borrower's email
+        const toastId2 = toast.loading("Sending email to borrower...");
+        await sendReturnAmountEmail({
+          lenderName: currentUserData?.name,
+          lenderEmail: currentUserData?.email,
+          lenderPhoneNumber,
+          borrowerName: ticket?.borrowerName,
+          borrowerEmail: ticket?.borrowerContactDetails?.borrowerEmail,
+          loanAmount: ticket?.loanAmount,
+          loanReason: ticket?.loanReason,
+          loanDate: ticket?.loanDate,
+          paymentMethod,
+          ticketId: ticket?._id,
+          paybackAmount: newPaybackAmount,
+          paybackDate: newPaybackDate,
+        });
+        toast.success("Email sent successfully", {
+          id: toastId2,
+        });
+      }
+
       router.push(`/ticket/${ticket?._id}/details`);
     } catch (error) {
       toast.error(error, {
@@ -173,6 +231,103 @@ const UpdateStatusForm = ({ ticket }) => {
             </PopoverContent>
           </Popover>
         </div>
+      </div>
+      <div className="my-4">
+        <h2 className="text-primary font-semibold">Payment Mode:</h2>
+        {paymentMode ? (
+          <p>Select the payment mode you want to share with the borrower</p>
+        ) : (
+          <p>
+            You have not added any payment mode yet. Please add a payment mode
+            in profile to proceed.
+          </p>
+        )}
+        {paymentMode && (
+          <div className="border rounded-md px-4 py-2 my-3">
+            {upiId && (
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="upiId"
+                  checked={isUpiIdChecked}
+                  onCheckedChange={(checked) => setIsUpiIdChecked(checked)}
+                />
+                <Label htmlFor="upiId" className="font-normal text-base">
+                  {upiId} <span className="text-primary">(UPI id)</span>
+                </Label>
+              </div>
+            )}
+            {upiNumber && (
+              <>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="upiNumber"
+                    checked={isUpiNumberChecked}
+                    onCheckedChange={(checked) =>
+                      setIsUpiNumberChecked(checked)
+                    }
+                  />
+                  <Label htmlFor="upiNumber" className="font-normal text-base">
+                    {upiNumber}{" "}
+                    <span className="text-primary">(UPI number)</span>
+                  </Label>
+                </div>
+              </>
+            )}
+
+            {/* Account number is Main here  */}
+            {bankAccount?.accountNumber && (
+              <div className="flex items-start space-x-2 my-1">
+                <Checkbox
+                  id="accountNumber"
+                  checked={isBankAccountChecked}
+                  onCheckedChange={(checked) =>
+                    setIsBankAccountChecked(checked)
+                  }
+                />
+                <div className="border rounded-md px-4 py-1">
+                  {bankAccount?.bankName && (
+                    <div>Bank Name: {bankAccount.bankName}</div>
+                  )}
+                  {bankAccount?.accountNumber && (
+                    <div>Account Number: {bankAccount.accountNumber}</div>
+                  )}
+                  {bankAccount?.ifsc && <div>IFSC: {bankAccount.ifsc}</div>}
+                  {bankAccount?.accountHolderName && (
+                    <div>
+                      Account Holder Name: {bankAccount.accountHolderName}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        <>
+          {contactNumber ? (
+            <>
+              <h2>Want to send your number as contact details?</h2>
+              <div className="flex items-center space-x-2 border rounded-md px-4 py-1 my-1">
+                <Checkbox
+                  id="sendNumber"
+                  checked={isContactNumberChecked}
+                  onCheckedChange={(checked) =>
+                    setIsContactNumberChecked(checked)
+                  }
+                />
+                <Label htmlFor="sendNumber" className="font-normal text-base">
+                  {contactNumber}
+                </Label>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="font-semibold">
+                Want to send your number as contact details?
+              </h2>
+              <p>You can add a contact number in profile.</p>
+            </>
+          )}
+        </>
       </div>
       <div className="my-3 flex justify-end gap-3">
         <Button variant="outline" onClick={() => router.back()}>

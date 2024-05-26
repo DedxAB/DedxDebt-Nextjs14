@@ -109,6 +109,7 @@ export default function UpdateTicketForm({ ticket, currentUserData }) {
       }
       toast.success("Ticket updated successfully", { id: toastId });
 
+      // Get the lender phone number to send it to the borrower
       const lenderPhoneNumber = isContactNumberChecked
         ? currentUserData?.phoneNumber
         : "";
