@@ -2,17 +2,17 @@ export const paymentModeValidation = ({
   lender,
   upiId,
   upiNumber,
-  accountHolderName,
   bankName,
   accountNumber,
   ifsc,
+  accountHolderName,
 }) => {
   let error = "";
 
   // Check lender is provided or not
   if (!lender) {
     return (error = "Please provide a user ID");
-  }
+  } 
 
   // Check for payment methods. At least one payment method should be provided
   if (!upiId && !upiNumber && !accountNumber) {
@@ -20,9 +20,11 @@ export const paymentModeValidation = ({
   }
 
   // If account number is provided, then all bank details should be provided
-  if (accountNumber && (!accountHolderName || !bankName || !ifsc)) {
+  if (accountNumber && ( !accountHolderName || !bankName || !ifsc)) {
     return (error = "Please provide all bank account details");
   }
+
+  
   if (upiId && typeof upiId !== "string") {
     return (error = "UPI ID must be a string");
   }
