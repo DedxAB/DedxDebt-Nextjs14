@@ -74,10 +74,10 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
       return;
     }
     // atleast one payment mode should be selected
-    if (!isUpiIdChecked && !isUpiNumberChecked && !isBankAccountChecked) {
-      toast.error("Please select a payment mode");
-      return;
-    }
+    // if (!isUpiIdChecked && !isUpiNumberChecked && !isBankAccountChecked) {
+    //   toast.error("Please select a payment mode");
+    //   return;
+    // }
 
     const toastId = toast.loading("Creating Loan Ticket..");
 

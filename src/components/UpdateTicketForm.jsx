@@ -78,10 +78,10 @@ export default function UpdateTicketForm({ ticket, currentUserData }) {
     }
 
     // Check if any payment mode is selected
-    if (!isUpiIdChecked && !isUpiNumberChecked && !isBankAccountChecked) {
-      toast.error("Please select a payment mode");
-      return;
-    }
+    // if (!isUpiIdChecked && !isUpiNumberChecked && !isBankAccountChecked) {
+    //   toast.error("Please select a payment mode");
+    //   return;
+    // }
 
     const toastId = toast.loading("Updating ticket...");
 

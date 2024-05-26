@@ -59,35 +59,39 @@ const UpdateEmail = ({
             .
           </Text>
         </Section>
-        <Section style={paragraphContent}>
-          <Text style={paragraph}>
-            Your lender, {lenderName} has provided the following payment
-            details:
-          </Text>
-          {paymentMethod.upiId && (
-            <Text style={paragraph}>UPI ID: {paymentMethod.upiId}</Text>
-          )}
-          {paymentMethod.upiNumber && (
-            <Text style={paragraph}>UPI Number: {paymentMethod.upiNumber}</Text>
-          )}
-          {paymentMethod.bankAccount && (
-            <>
+        {Object.keys(paymentMethod).length > 0 && (
+          <Section style={paragraphContent}>
+            <Text style={paragraph}>
+              Your lender, {lenderName} has provided the following payment
+              details:
+            </Text>
+            {paymentMethod.upiId && (
+              <Text style={paragraph}>UPI ID: {paymentMethod.upiId}</Text>
+            )}
+            {paymentMethod.upiNumber && (
               <Text style={paragraph}>
-                Bank Name: {paymentMethod.bankAccount.bankName}
+                UPI Number: {paymentMethod.upiNumber}
               </Text>
-              <Text style={paragraph}>
-                Account Number: {paymentMethod.bankAccount.accountNumber}
-              </Text>
-              <Text style={paragraph}>
-                IFSC Code: {paymentMethod.bankAccount.ifsc}
-              </Text>
-              <Text style={paragraph}>
-                Account Holder Name:{" "}
-                {paymentMethod.bankAccount.accountHolderName}
-              </Text>
-            </>
-          )}
-        </Section>
+            )}
+            {paymentMethod.bankAccount && (
+              <>
+                <Text style={paragraph}>
+                  Bank Name: {paymentMethod.bankAccount.bankName}
+                </Text>
+                <Text style={paragraph}>
+                  Account Number: {paymentMethod.bankAccount.accountNumber}
+                </Text>
+                <Text style={paragraph}>
+                  IFSC Code: {paymentMethod.bankAccount.ifsc}
+                </Text>
+                <Text style={paragraph}>
+                  Account Holder Name:{" "}
+                  {paymentMethod.bankAccount.accountHolderName}
+                </Text>
+              </>
+            )}
+          </Section>
+        )}
         <Section style={paragraphContent}>
           <Text style={paragraph}>
             If you have any questions or concerns, please contact your lender.
@@ -97,12 +101,15 @@ const UpdateEmail = ({
             <Text style={paragraph}> Phone: {lenderPhoneNumber} </Text>
           )}
         </Section>
-        <Section style={paragraphContent}>
-          <Text style={paragraph}>
-            You can repay the debt using the provided payment details. Please
-            ensure to use the correct payment method as specified by the lender.
-          </Text>
-        </Section>
+        {Object.keys(paymentMethod).length > 0 && (
+          <Section style={paragraphContent}>
+            <Text style={paragraph}>
+              You can repay the debt using the provided payment details. Please
+              ensure to use the correct payment method as specified by the
+              lender.
+            </Text>
+          </Section>
+        )}
         <Section style={paragraphContent}>
           <Text style={paragraph}>Thank you,</Text>
           <Text style={{ ...paragraph, fontSize: "16px" }}>DedxDebt Team</Text>
