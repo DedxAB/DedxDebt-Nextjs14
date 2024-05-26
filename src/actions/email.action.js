@@ -5,6 +5,7 @@ import { render } from "@react-email/render";
 import Email from "@/email/email";
 import UpdateEmail from "@/email/updateEmail";
 import ApologyEmail from "@/email/apologyEmail";
+import ReturnAmountEmail from "@/email/returnAmountEmail";
 
 export const sendEmail = async ({
   lenderName,
@@ -160,5 +161,65 @@ export const sendApologyMail = async ({
     await transporter.sendMail(options);
   } catch (error) {
     console.log(`Error sending mail: ${error}`);
+  }
+};
+
+export const sendReturnAmountEmail = async ({
+  lenderName,
+  lenderEmail,
+  lenderPhoneNumber,
+  borrowerName,
+  borrowerEmail,
+  loanAmount,
+  loanReason,
+  loanDate,
+  paymentMethod,
+  ticketId,
+  paybackAmount,
+  paybackDate,
+}) => {
+  const customEmailSubject = "Paid Amount Notification 🚨";
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.USER_EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+    const emailHtml = render(
+      <ReturnAmountEmail
+        lenderName={lenderName}
+        lenderEmail={lenderEmail}
+        lenderPhoneNumber={lenderPhoneNumber}
+        borrowerName={borrowerName}
+        loanAmount={loanAmount}
+        loanReason={loanReason}
+        loanDate={loanDate}
+        paymentMethod={paymentMethod}
+        ticketId={ticketId}
+        paybackAmount={paybackAmount}
+        paybackDate={paybackDate}
+      />,
+      {
+        pretty: true,
+      }
+    );
+
+    const options = {
+      from: {
+        name: "DedxDebt - Debt Manager",
+        address: process.env.USER_EMAIL,
+      },
+      to: borrowerEmail,
+      subject: customEmailSubject,
+      html: emailHtml,
+    };
+    await transporter.sendMail(options);
+  } catch (error) {
+    console.log(error);
   }
 };
