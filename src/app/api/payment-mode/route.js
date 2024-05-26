@@ -53,9 +53,7 @@ export async function POST(req) {
       await User.findByIdAndUpdate(
         { _id: lender },
         {
-          $push: {
-            paymentModes: paymentMode._id,
-          },
+          paymentModes: paymentMode._id,
         },
         { new: true }
       );
