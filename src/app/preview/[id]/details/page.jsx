@@ -1,25 +1,11 @@
-import DeleteTicket from "@/components/DeleteTicket";
 import ReturnAmountCard from "@/components/ReturnAmountCard";
 import TicketCard from "@/components/TicketCard";
-import { Button } from "@/components/ui/button";
 import { fetchTicketById } from "@/services/ticketServices";
-import { baseUrl } from "@/utils/constants";
-import { currentUser } from "@clerk/nextjs/server";
-import Link from "next/link";
-import { redirect } from "next/navigation";
 
-export default async function TicketDetails({ params }) {
-  const user = await currentUser();
-
+export default async function Preview({ params }) {
   const { id } = params;
-
   const { data: ticket } = await fetchTicketById(id);
-  // console.log(ticket);
-
-  // check if the user is the owner of the ticket, if not redirect to the home page
-  if (user?.emailAddresses[0].emailAddress !== ticket?.lender?.email) {
-    redirect("/dashboard");
-  }
+  //   console.log(ticket);
 
   const paymentsBackArray = ticket?.paymentsBack;
   // Calculate the total payback amount
@@ -34,32 +20,12 @@ export default async function TicketDetails({ params }) {
 
   return (
     <>
+      <h1>Preview</h1>
       <>
         <TicketCard ticket={ticket} />
       </>
-
-      {/* Updating the ticket details */}
-      <div className="flex gap-3 my-3 justify-end">
-        <Link href={`/preview/${ticket?._id}/details`}>
-          <Button variant={`outline`}>Preview</Button>
-        </Link>
-        <Link href={`${baseUrl}/update-ticket/${ticket?._id}`}>
-          <Button>Update</Button>
-        </Link>
-        <>
-          <DeleteTicket ticket={ticket} />
-        </>
-      </div>
-
-      <div className="my-4 flex flex-col items-start justify-between gap-2">
-        <h1>Details send to a wrong person? </h1>
-        <Link href={`${baseUrl}/update-ticket/${ticket?._id}/apologize`}>
-          <Button>Apologize</Button>
-        </Link>
-      </div>
-
       {/* Return Amount & Status along with date */}
-      <div>
+      <div className="mt-10">
         <h1>Return Amount & Status along with date</h1>
       </div>
       {/* All payback details will be shown here */}
@@ -114,16 +80,6 @@ export default async function TicketDetails({ params }) {
           <p className="bg-red-200 text-black font-semibold text-center py-1 px-3 rounded-md">
             ₹{leftAmount}
           </p>
-        </div>
-      </div>
-
-      {/* Updating the status of the ticket */}
-      <div className="my-3 flex flex-col gap-2 items-end">
-        <h1>Want to update status? </h1>
-        <div>
-          <Link href={`${baseUrl}/update-ticket/${ticket?._id}/payment-status`}>
-            <Button>Update</Button>
-          </Link>
         </div>
       </div>
     </>

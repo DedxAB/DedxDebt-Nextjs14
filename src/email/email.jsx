@@ -1,14 +1,19 @@
 import {
   Body,
   Container,
+  Column,
   Head,
+  Hr,
   Html,
+  Img,
+  Link,
   Preview,
+  Row,
   Section,
   Text,
 } from "@react-email/components";
-import dayjs from "dayjs";
 import * as React from "react";
+import dayjs from "dayjs";
 
 const Email = ({
   lenderName,
@@ -19,6 +24,7 @@ const Email = ({
   loanDate,
   loanReason,
   paymentMethod,
+  ticketId
 }) => (
   <Html>
     <Head />
@@ -39,37 +45,45 @@ const Email = ({
             for{" "}
             {loanReason ? `${loanReason.toLowerCase()}.` : "personal reasons."}
           </Text>
+          <Text style={paragraph}>
+            You can preview your debt story by clicking{" "}
+            <Link
+              href={`https://dedxdebt.vercel.app/preview/${ticketId}/details`}
+              style={link}
+            >
+              here
+            </Link>
+            .
+          </Text>
         </Section>
         <Section style={paragraphContent}>
           <Text style={paragraph}>
             Your lender, {lenderName} has provided the following payment
             details:
           </Text>
-          <ul>
-            {paymentMethod.upiId && (
-              <li style={paragraph}>UPI ID: {paymentMethod.upiId}</li>
-            )}
-            {paymentMethod.upiNumber && (
-              <li style={paragraph}>UPI Number: {paymentMethod.upiNumber}</li>
-            )}
-            {paymentMethod.bankAccount && (
-              <>
-                <li style={paragraph}>
-                  Bank Name: {paymentMethod.bankAccount.bankName}
-                </li>
-                <li style={paragraph}>
-                  Account Number: {paymentMethod.bankAccount.accountNumber}
-                </li>
-                <li style={paragraph}>
-                  IFSC Code: {paymentMethod.bankAccount.ifsc}
-                </li>
-                <li style={paragraph}>
-                  Account Holder Name:{" "}
-                  {paymentMethod.bankAccount.accountHolderName}
-                </li>
-              </>
-            )}
-          </ul>
+          {paymentMethod.upiId && (
+            <Text style={paragraph}>UPI ID: {paymentMethod.upiId}</Text>
+          )}
+          {paymentMethod.upiNumber && (
+            <Text style={paragraph}>UPI Number: {paymentMethod.upiNumber}</Text>
+          )}
+          {paymentMethod.bankAccount && (
+            <>
+              <Text style={paragraph}>
+                Bank Name: {paymentMethod.bankAccount.bankName}
+              </Text>
+              <Text style={paragraph}>
+                Account Number: {paymentMethod.bankAccount.accountNumber}
+              </Text>
+              <Text style={paragraph}>
+                IFSC Code: {paymentMethod.bankAccount.ifsc}
+              </Text>
+              <Text style={paragraph}>
+                Account Holder Name:{" "}
+                {paymentMethod.bankAccount.accountHolderName}
+              </Text>
+            </>
+          )}
         </Section>
         <Section style={paragraphContent}>
           <Text style={paragraph}>

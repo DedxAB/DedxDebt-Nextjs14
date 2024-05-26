@@ -106,6 +106,9 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
         const errorData = await res.json();
         throw new Error(errorData.error);
       }
+      const data = await res.json();
+      const ticketId = data?.data?._id;
+      // console.log(ticketId);
       toast.success("Loan Ticket created successfully", {
         id: toastId,
       });
@@ -128,6 +131,7 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
         loanDate,
         loanReason,
         paymentMethod,
+        ticketId,
       });
 
       toast.success("Email sent to borrower", {
