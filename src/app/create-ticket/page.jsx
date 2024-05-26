@@ -13,7 +13,12 @@ export default async function page() {
   if (!currentUserData?.onboarded) {
     redirect("/onboarding"); // redirect to onboarding page
   }
-  
+
+  const paymentMode = currentUserData?.paymentModes?.paymentMethod;
+
+  if (!paymentMode) {
+    redirect("/profile");
+  }
 
   return (
     <div>

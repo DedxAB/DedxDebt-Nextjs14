@@ -13,6 +13,10 @@ export default async function page() {
   // fetch user data from mongoDB
   const data = await fetchUserByClerkId(user?.id);
   let userData = data?.data ? data?.data : null;
+  // console.log(userData);
+
+  // this data comes from mongoDB and this is the payment mode data
+  const paymentMode = userData?.paymentModes?.paymentMethod;
 
   // this data comes from mongoDB and clerk
   const userInfo = {
@@ -26,57 +30,78 @@ export default async function page() {
 
   // console.log(userData);
 
+  let shortName = userInfo?.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("");
+
   return (
     <div className="">
       <div>
         <h2>Profile</h2>
         <p>View and edit your profile</p>
       </div>
-      <div>
-        <Avatar>
-          <AvatarImage src={userInfo?.image} alt={userInfo?.name} />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+      <div className="border rounded-md px-4 py-2 my-3">
+        <>
+          <Avatar>
+            <AvatarImage src={userInfo?.image} alt={userInfo?.name} />
+            <AvatarFallback>{shortName}</AvatarFallback>
+          </Avatar>
+        </>
+        <>
+          <p>Name: {userInfo?.name}</p>
+          <p>Email: {userInfo?.email}</p>
+          <p>Phone: {userInfo?.phoneNumber}</p>
+          <p>Username: {userInfo?.username}</p>
+          <p>Address: {userInfo?.address}</p>
+        </>
       </div>
-      <div>
-        <p>Name: {userInfo?.name}</p>
-        <p>Email: {userInfo?.email}</p>
-        <p>Phone: {userInfo?.phoneNumber}</p>
-        <p>Username: {userInfo?.username}</p>
-        <p>Address: {userInfo?.address}</p>
-      </div>
-      <div>
+      <div className="my-3 flex justify-end items-center">
         <Link href={"/profile/edit"}>
-          <Button variant="outline">Edit Profile</Button>
+          <Button>Edit Profile</Button>
         </Link>
       </div>
-      {userData?.paymentModes?.map((paymentMode, index) => {
-        return (
-          <div key={index} className="my-5">
-            <h2>Payment Mode</h2>
-            <p>View and Update your payment mode</p>
-            <div>
-              <p>UPI: {paymentMode?.paymentMethod?.upiId}</p>
-              <p>UPI Number: {paymentMode?.paymentMethod?.upiNumber}</p>
-              <p>
-                Account Holder Name:{" "}
-                {paymentMode?.paymentMethod?.bankAccount?.accountHolderName}
-              </p>
-              <p>
-                Bank Name: {paymentMode?.paymentMethod?.bankAccount?.bankName}
-              </p>
-              <p>
-                Account Number:{" "}
-                {paymentMode?.paymentMethod?.bankAccount?.accountNumber}
-              </p>
-              <p>IFSC: {paymentMode?.paymentMethod?.bankAccount?.ifsc}</p>
-            </div>
+
+      {!paymentMode ? (
+        <>
+          <div className="border rounded-md px-4 py-2">
+            <p>No Payment Mode Added. Add Payment Mode to create a ticket.</p>
           </div>
-        );
-      })}
-      <div>
+        </>
+      ) : (
+        <div className="border rounded-md px-4 py-2">
+          {paymentMode?.upiId && <div>UPI ID: {paymentMode?.upiId}</div>}
+          {paymentMode?.upiNumber && (
+            <div>UPI Number: {paymentMode?.upiNumber}</div>
+          )}
+
+          {/* Account number is Main here  */}
+          {paymentMode?.bankAccount?.accountNumber && (
+            <div className="border rounded-md px-4 py-1 my-1">
+              {paymentMode?.bankAccount?.bankName && (
+                <div>Bank Name: {paymentMode?.bankAccount.bankName}</div>
+              )}
+              {paymentMode?.bankAccount?.accountNumber && (
+                <div>
+                  Account Number: {paymentMode?.bankAccount.accountNumber}
+                </div>
+              )}
+              {paymentMode?.bankAccount?.ifsc && (
+                <div>IFSC: {paymentMode?.bankAccount.ifsc}</div>
+              )}
+              {paymentMode?.bankAccount?.accountHolderName && (
+                <div>
+                  Account Holder Name:{" "}
+                  {paymentMode?.bankAccount.accountHolderName}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+      <div className="my-3 flex justify-end items-center">
         <Link href={"/payment-mode"}>
-          <Button variant="outline">Update Payment Mode</Button>
+          <Button>Update Payment Mode</Button>
         </Link>
       </div>
     </div>

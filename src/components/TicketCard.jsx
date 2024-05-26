@@ -19,7 +19,7 @@ export default function TicketCard({ ticket }) {
         <p>
           Borrowed Amount: <strong>₹{ticket?.loanAmount}</strong>
         </p>
-      )}
+      )} 
       {ticket?.loanReason && <p>Reason: {ticket?.loanReason}</p>}
       {ticket?.borrowerContactDetails?.borrowerEmail && (
         <p>Email: {ticket?.borrowerContactDetails?.borrowerEmail}</p>
@@ -28,9 +28,9 @@ export default function TicketCard({ ticket }) {
         <p>
           Phone Number: {ticket?.borrowerContactDetails?.borrowerPhoneNumber}
         </p>
-      )}
+      )} 
 
-      <p>Loan Date: {dayjs(ticket?.loanDate).format("MMM D, YYYY")}</p>
+      <p>Borrowed Date: {dayjs(ticket?.loanDate).format("MMM D, YYYY")}</p>
       {/* {pathname === `/ticket/${ticket._id}/details` && (
         <>
           <p>

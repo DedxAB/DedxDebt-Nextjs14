@@ -12,10 +12,13 @@ import * as React from "react";
 
 const Email = ({
   lenderName,
+  lenderEmail,
+  lenderPhoneNumber,
   borrowerName,
   loanAmount,
   loanDate,
   loanReason,
+  paymentMethod,
 }) => (
   <Html>
     <Head />
@@ -43,18 +46,39 @@ const Email = ({
             details:
           </Text>
           <ul>
-            <li style={paragraph}>UPI ID: arnab.5547@sbi</li>
-            <li style={paragraph}>UPI Number: 8597605547</li>
+            {paymentMethod.upiId && (
+              <li style={paragraph}>UPI ID: {paymentMethod.upiId}</li>
+            )}
+            {paymentMethod.upiNumber && (
+              <li style={paragraph}>UPI Number: {paymentMethod.upiNumber}</li>
+            )}
+            {paymentMethod.bankAccount && (
+              <>
+                <li style={paragraph}>
+                  Bank Name: {paymentMethod.bankAccount.bankName}
+                </li>
+                <li style={paragraph}>
+                  Account Number: {paymentMethod.bankAccount.accountNumber}
+                </li>
+                <li style={paragraph}>
+                  IFSC Code: {paymentMethod.bankAccount.ifsc}
+                </li>
+                <li style={paragraph}>
+                  Account Holder Name:{" "}
+                  {paymentMethod.bankAccount.accountHolderName}
+                </li>
+              </>
+            )}
           </ul>
         </Section>
         <Section style={paragraphContent}>
           <Text style={paragraph}>
             If you have any questions or concerns, please contact your lender.
           </Text>
-          <ul>
-            <li style={paragraph}> Email: arnab.officialcorp@gmail.com </li>
-            <li style={paragraph}> Phone: 8597605547 </li>
-          </ul>
+          {lenderEmail && <Text style={paragraph}> Email: {lenderEmail} </Text>}
+          {lenderPhoneNumber && (
+            <Text style={paragraph}> Phone: {lenderPhoneNumber} </Text>
+          )}
         </Section>
         <Section style={paragraphContent}>
           <Text style={paragraph}>

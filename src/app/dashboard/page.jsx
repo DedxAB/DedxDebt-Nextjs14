@@ -7,7 +7,7 @@ export default async function Dashboard() {
   const user = await currentUser();
 
   const userData = await fetchUserByClerkId(user?.id);
-  // console.log(userData?.data?._id);
+  // console.log(userData?.data);
 
   const ticketData = await fetchAllTicketsByUserId(userData?.data?._id);
   // console.log(noteData);
@@ -38,7 +38,14 @@ export default async function Dashboard() {
   return (
     <div>
       <div>
-        <h2>Here is your created loan ticket</h2>
+        {ticketData?.data?.length === 0 ? (
+          <h1>No ticket found</h1>
+        ) : (
+          <h1>
+            Your Tickets{" "}
+            <span className="text-primary">({ticketData?.data?.length})</span>
+          </h1>
+        )}
       </div>
       <div>
         {ticketData?.data?.map((ticket) => (

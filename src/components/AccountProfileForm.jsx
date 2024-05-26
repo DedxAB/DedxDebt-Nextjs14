@@ -84,7 +84,9 @@ export default function AccountProfileForm({ userData, btnText }) {
           />
         </div>
         <div>
-          <Label htmlFor="phoneNumber">Phone Number</Label>
+          <Label htmlFor="phoneNumber">
+            Phone Number (can be used to send along with the ticket)
+          </Label>
           <Input
             type="text"
             value={phoneNumber}

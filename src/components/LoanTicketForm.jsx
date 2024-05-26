@@ -22,6 +22,7 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sendEmail } from "@/actions/email.action";
 import dayjs from "dayjs";
+import { Checkbox } from "./ui/checkbox";
 
 export default function LoanTicketForm({ lenderId, currentUserData }) {
   const [paybackStatus, setPaybackStatus] = useState("pending");
@@ -36,14 +37,45 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
   const [paybackAmount, setPaybackAmount] = useState(0);
   const [paybackDate, setPaybackDate] = useState(new Date());
 
+  const [isUpiIdChecked, setIsUpiIdChecked] = useState(false);
+  const [isUpiNumberChecked, setIsUpiNumberChecked] = useState(false);
+  const [isBankAccountChecked, setIsBankAccountChecked] = useState(false);
+  const [isContactNumberChecked, setIsContactNumberChecked] = useState(false);
+
   const router = useRouter();
 
-  const PostLoanTicket = async (e) => {
+  const paymentMode = currentUserData?.paymentModes?.paymentMethod;
+  const contactNumber = currentUserData?.phoneNumber;
+
+  const upiId = paymentMode?.upiId;
+  const upiNumber = paymentMode?.upiNumber;
+  const bankAccount = paymentMode?.bankAccount;
+
+  // Create payment method object to add the selected payment mode and send it to the borrower email
+  const paymentMethod = {};
+  if (isUpiIdChecked) {
+    paymentMethod.upiId = upiId;
+  }
+  if (isUpiNumberChecked) {
+    paymentMethod.upiNumber = upiNumber;
+  }
+  if (isBankAccountChecked) {
+    paymentMethod.bankAccount = bankAccount;
+  }
+
+  // console.log(currentUserData);
+
+  const postLoanTicket = async (e) => {
     e.preventDefault();
 
     // check if borrower email and confirm email are the same
     if (borrowerEmail !== confirmEmail) {
       toast.error("Emails do not match");
+      return;
+    }
+    // atleast one payment mode should be selected
+    if (!isUpiIdChecked && !isUpiNumberChecked && !isBankAccountChecked) {
+      toast.error("Please select a payment mode");
       return;
     }
 
@@ -81,13 +113,21 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
       const toastId2 = toast.loading("Sending email to borrower..");
       // send email to borrower
       const lenderName = currentUserData?.name;
+      const lenderEmail = currentUserData?.email;
+
+      const lenderPhoneNumber = isContactNumberChecked
+        ? currentUserData?.phoneNumber
+        : "";
       await sendEmail({
         lenderName,
+        lenderEmail,
+        lenderPhoneNumber,
         borrowerName,
         borrowerEmail,
         loanAmount,
         loanDate,
         loanReason,
+        paymentMethod,
       });
 
       toast.success("Email sent to borrower", {
@@ -312,8 +352,111 @@ export default function LoanTicketForm({ lenderId, currentUserData }) {
           email to the borrower with the debt details.
         </p>
       </div>
+
+      <>
+        <h2 className="text-primary font-semibold">Payment Mode:</h2>
+        {paymentMode ? (
+          <p>Select the payment mode you want to share with the borrower</p>
+        ) : (
+          <p>
+            You have not added any payment mode yet. Please add a payment mode
+            in profile to proceed.
+          </p>
+        )}
+        {paymentMode && (
+          <div className="border rounded-md px-4 py-2 my-3">
+            {upiId && (
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="upiId"
+                  checked={isUpiIdChecked}
+                  onCheckedChange={(checked) => setIsUpiIdChecked(checked)}
+                />
+                <Label htmlFor="upiId" className="font-normal text-base">
+                  {upiId} <span className="text-primary">(UPI id)</span>
+                </Label>
+              </div>
+            )}
+            {upiNumber && (
+              <>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="upiNumber"
+                    checked={isUpiNumberChecked}
+                    onCheckedChange={(checked) =>
+                      setIsUpiNumberChecked(checked)
+                    }
+                  />
+                  <Label htmlFor="upiNumber" className="font-normal text-base">
+                    {upiNumber}{" "}
+                    <span className="text-primary">(UPI number)</span>
+                  </Label>
+                </div>
+              </>
+            )}
+
+            {/* Account number is Main here  */}
+            {bankAccount?.accountNumber && (
+              <div className="flex items-start space-x-2 my-1">
+                <Checkbox
+                  id="accountNumber"
+                  checked={isBankAccountChecked}
+                  onCheckedChange={(checked) =>
+                    setIsBankAccountChecked(checked)
+                  }
+                />
+                <div className="border rounded-md px-4 py-1">
+                  {bankAccount?.bankName && (
+                    <div>Bank Name: {bankAccount.bankName}</div>
+                  )}
+                  {bankAccount?.accountNumber && (
+                    <div>Account Number: {bankAccount.accountNumber}</div>
+                  )}
+                  {bankAccount?.ifsc && <div>IFSC: {bankAccount.ifsc}</div>}
+                  {bankAccount?.accountHolderName && (
+                    <div>
+                      Account Holder Name: {bankAccount.accountHolderName}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        <>
+          {contactNumber ? (
+            <>
+              <h2>Want to send your number as contact details?</h2>
+              <div className="flex items-center space-x-2 border rounded-md px-4 py-1 my-1">
+                <Checkbox
+                  id="sendNumber"
+                  checked={isContactNumberChecked}
+                  onCheckedChange={(checked) =>
+                    setIsContactNumberChecked(checked)
+                  }
+                />
+                <Label htmlFor="sendNumber" className="font-normal text-base">
+                  {contactNumber}
+                </Label>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="font-semibold">
+                Want to send your number as contact details?
+              </h2>
+              <p>You can add a contact number in profile.</p>
+            </>
+          )}
+        </>
+      </>
+
       <div className="flex items-center justify-end mt-5 mb-28">
-        <Button onClick={PostLoanTicket} className="bg-primary font-semibold">
+        <Button
+          onClick={postLoanTicket}
+          className="bg-primary font-semibold"
+          disabled={!paymentMode}
+        >
           Publish
         </Button>
       </div>
