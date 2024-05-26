@@ -60,12 +60,10 @@ const userSchema = new mongoose.Schema(
         ref: "LoanTicket",
       },
     ],
-    paymentModes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "PaymentMode",
-      },
-    ],
+    paymentModes: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PaymentMode",
+    },
     onboarded: {
       type: Boolean,
       default: false,
