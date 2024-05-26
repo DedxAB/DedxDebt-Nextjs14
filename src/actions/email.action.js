@@ -65,12 +65,16 @@ export const sendEmail = async ({
 
 export const sendUpdatedTicketEmail = async ({
   lenderName,
+  lenderEmail,
+  lenderPhoneNumber,
   borrowerName,
   borrowerEmail,
   loanAmount,
   loanReason,
   loanDate,
   customEmailMessage,
+  paymentMethod,
+  ticketId,
 }) => {
   const customEmailSubject = "Updated Debt Notification 🚨";
   try {
@@ -87,11 +91,15 @@ export const sendUpdatedTicketEmail = async ({
     const emailHtml = render(
       <UpdateEmail
         lenderName={lenderName}
+        lenderEmail={lenderEmail}
+        lenderPhoneNumber={lenderPhoneNumber}
         borrowerName={borrowerName}
         loanAmount={loanAmount}
         loanReason={loanReason}
         loanDate={loanDate}
         customEmailMessage={customEmailMessage}
+        paymentMethod={paymentMethod}
+        ticketId={ticketId}
       />,
       {
         pretty: true,
