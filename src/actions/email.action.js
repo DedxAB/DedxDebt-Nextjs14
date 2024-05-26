@@ -16,6 +16,7 @@ export const sendEmail = async ({
   loanDate,
   loanReason,
   paymentMethod,
+  ticketId,
 }) => {
   const customEmailSubject = "New Debt Notification 🚨";
 
@@ -40,6 +41,7 @@ export const sendEmail = async ({
         loanDate={loanDate}
         loanReason={loanReason}
         paymentMethod={paymentMethod}
+        ticketId={ticketId}
       />,
       {
         pretty: true,
