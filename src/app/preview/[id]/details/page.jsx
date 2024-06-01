@@ -4,8 +4,17 @@ import { fetchTicketById } from "@/services/ticketServices";
 
 export default async function Preview({ params }) {
   const { id } = params;
-  const { data: ticket } = await fetchTicketById(id);
+  const data = await fetchTicketById(id);
+  let ticket = data?.data;
   //   console.log(ticket);
+
+  if (!ticket) {
+    return (
+      <>
+        <h2>Sorry the ticket you are looking for is not available.</h2>
+      </>
+    );
+  }
 
   const paymentsBackArray = ticket?.paymentsBack;
   // Calculate the total payback amount

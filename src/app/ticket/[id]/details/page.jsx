@@ -15,12 +15,23 @@ export default async function TicketDetails({ params }) {
 
   const { id } = params;
 
-  const { data: ticket } = await fetchTicketById(id);
+  const data = await fetchTicketById(id);
   // console.log(ticket?.reminderSent);
+  let ticket = data?.data;
 
   // check if the user is the owner of the ticket, if not redirect to the home page
-  if (user?.emailAddresses[0].emailAddress !== ticket?.lender?.email) {
+  if (
+    ticket &&
+    user?.emailAddresses[0].emailAddress !== ticket?.lender?.email
+  ) {
     redirect("/dashboard");
+  }
+  if (!ticket) {
+    return (
+      <div>
+        <h2>Sorry the ticket you are looking for is not available.</h2>
+      </div>
+    );
   }
 
   const paymentsBackArray = ticket?.paymentsBack;
