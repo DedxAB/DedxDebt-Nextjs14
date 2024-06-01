@@ -9,8 +9,12 @@ export default async function Dashboard() {
   const userData = await fetchUserByClerkId(user?.id);
   // console.log(userData?.data);
 
-  const ticketData = await fetchAllTicketsByUserId(userData?.data?._id);
-  // console.log(noteData);
+  let ticketData = null;
+  if (userData) {
+    ticketData = await fetchAllTicketsByUserId(userData?.data?._id);
+  }
+
+  // console.log(ticketData);
 
   /*
 
@@ -37,16 +41,21 @@ export default async function Dashboard() {
 
   return (
     <div>
-      <div>
-        {ticketData?.data?.length === 0 ? (
-          <h1>No ticket found</h1>
-        ) : (
-          <h1>
-            Your Tickets{" "}
-            <span className="text-primary">({ticketData?.data?.length})</span>
-          </h1>
-        )}
-      </div>
+      {
+        <div>
+          {!ticketData || ticketData?.data?.length < 1 ? (
+            <h1>
+              No <span className="text-primary">Ticket</span> found
+              <span className="text-primary">!</span>
+            </h1>
+          ) : (
+            <h1>
+              Your Tickets{" "}
+              <span className="text-primary">({ticketData?.data?.length})</span>
+            </h1>
+          )}
+        </div>
+      }
       <div>
         {ticketData?.data?.map((ticket) => (
           <TicketCard key={ticket?._id} ticket={ticket} />
