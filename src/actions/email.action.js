@@ -6,6 +6,7 @@ import Email from "@/email/email";
 import UpdateEmail from "@/email/updateEmail";
 import ApologyEmail from "@/email/apologyEmail";
 import ReturnAmountEmail from "@/email/returnAmountEmail";
+import FullPaidEmail from "@/email/FullPaidEmail";
 
 export const sendEmail = async ({
   lenderName,
@@ -203,6 +204,52 @@ export const sendReturnAmountEmail = async ({
         ticketId={ticketId}
         paybackAmount={paybackAmount}
         paybackDate={paybackDate}
+      />,
+      {
+        pretty: true,
+      }
+    );
+
+    const options = {
+      from: {
+        name: "DedxDebt - Debt Manager",
+        address: process.env.USER_EMAIL,
+      },
+      to: borrowerEmail,
+      subject: customEmailSubject,
+      html: emailHtml,
+    };
+    await transporter.sendMail(options);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const sendFullPaidEmail = async ({
+  borrowerEmail,
+  borrowerName,
+  ticketId,
+  lenderEmail,
+  message,
+}) => {
+  const customEmailSubject = "Thank you for paying the full amount 🎉";
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.USER_EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+    const emailHtml = render(
+      <FullPaidEmail
+        borrowerName={borrowerName}
+        message={message}
+        ticketId={ticketId}
+        lenderEmail={lenderEmail}
       />,
       {
         pretty: true,
