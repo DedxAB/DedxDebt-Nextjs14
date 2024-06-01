@@ -37,7 +37,7 @@ const ReturnAmountEmail = ({
           <Text style={heading}>DEBT UPDATE</Text>
           <Text style={paragraph}>Hello, {borrowerName}</Text>
           <Text style={paragraph}>
-            Here is the summary of the amount you paid back.
+            Here is the summary of the amount you paid.
           </Text>
         </Section>
 
@@ -100,9 +100,9 @@ const ReturnAmountEmail = ({
           <Text style={paragraph}>
             If you have any questions or concerns, please contact your lender.
           </Text>
-          {lenderEmail && <Text style={paragraph}> Email: {lenderEmail} </Text>}
+          {lenderEmail && <Text style={paragraph}> mail : {lenderEmail} </Text>}
           {lenderPhoneNumber && (
-            <Text style={paragraph}> Phone: {lenderPhoneNumber} </Text>
+            <Text style={paragraph}> phone : {lenderPhoneNumber} </Text>
           )}
         </Section>
         {Object.keys(paymentMethod).length > 0 && (

@@ -1,5 +1,7 @@
 import DeleteTicket from "@/components/DeleteTicket";
 import ReturnAmountCard from "@/components/ReturnAmountCard";
+import SendFullPaymentEmail from "@/components/SendFullPaymentEmail";
+import SendReminderEmail from "@/components/SendReminderEmail";
 import TicketCard from "@/components/TicketCard";
 import { Button } from "@/components/ui/button";
 import { fetchTicketById } from "@/services/ticketServices";
@@ -14,7 +16,7 @@ export default async function TicketDetails({ params }) {
   const { id } = params;
 
   const { data: ticket } = await fetchTicketById(id);
-  // console.log(ticket);
+  // console.log(ticket?.reminderSent);
 
   // check if the user is the owner of the ticket, if not redirect to the home page
   if (user?.emailAddresses[0].emailAddress !== ticket?.lender?.email) {
@@ -39,17 +41,33 @@ export default async function TicketDetails({ params }) {
       </>
 
       {/* Updating the ticket details */}
-      <div className="flex gap-3 my-3 justify-end">
+      <div className="flex gap-3 my-3 justify-end items-center flex-wrap">
+        {
+          // If the ticket is not paid, then only show the reminder button
+          leftAmount > 0 && <SendReminderEmail ticket={ticket} />
+        }
+
         <Link href={`/preview/${ticket?._id}/details`}>
           <Button variant={`outline`}>Preview</Button>
         </Link>
-        <Link href={`${baseUrl}/update-ticket/${ticket?._id}`}>
-          <Button>Update</Button>
-        </Link>
+        {leftAmount > 0 && (
+          <Link href={`${baseUrl}/update-ticket/${ticket?._id}`}>
+            <Button>Update</Button>
+          </Link>
+        )}
         <>
           <DeleteTicket ticket={ticket} />
         </>
       </div>
+
+      {
+        // If the ticket is fully paid, then only show the send full payment email button
+        !ticket?.reminderSent && leftAmount === 0 && (
+          <>
+            <SendFullPaymentEmail ticket={ticket} />
+          </>
+        )
+      }
 
       <div className="my-4 flex flex-col items-start justify-between gap-2">
         <h1>Details send to a wrong person? </h1>
