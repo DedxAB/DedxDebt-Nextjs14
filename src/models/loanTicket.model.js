@@ -57,6 +57,11 @@ const loanTicketSchema = new mongoose.Schema(
       required: [true, "Please provide the loan date"],
       default: Date.now,
     },
+    markAsPaid: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     reminderSent: {
       type: Boolean,
       required: false,
